@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Path Test</title>
+</head>
+<body>
+    <h1>Testing Image Paths</h1>
+    
+    <h2>Old media (should work):</h2>
+    <img src="/project_images/media-1.jpg" width="200" alt="media-1">
+    
+    <h2>Newly uploaded (testing):</h2>
+    <img src="/project_images/1770063393742-hpiw9fdft.jpg" width="200" alt="new-1">
+    <img src="/project_images/1770063393743-g9aebhpbq.jpg" width="200" alt="new-2">
+    
+    <h2>Direct check:</h2>
+    <p>Open these URLs in a new tab:</p>
+    <ul>
+        <li><a href="/project_images/media-1.jpg" target="_blank">/project_images/media-1.jpg (old)</a></li>
+        <li><a href="/project_images/1770063393742-hpiw9fdft.jpg" target="_blank">/project_images/1770063393742-hpiw9fdft.jpg (new)</a></li>
+    </ul>
+    
+    <script>
+        console.log('Testing image load...');
+        
+        const testOld = new Image();
+        testOld.onload = () => console.log('✓ Old image loaded');
+        testOld.onerror = () => console.error('✗ Old image failed');
+        testOld.src = '/project_images/media-1.jpg';
+        
+        const testNew = new Image();
+        testNew.onload = () => console.log('✓ New image loaded');
+        testNew.onerror = () => console.error('✗ New image failed');
+        testNew.src = '/project_images/1770063393742-hpiw9fdft.jpg';
+    </script>
+</body>
+</html>
