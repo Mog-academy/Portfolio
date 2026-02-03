@@ -1,11 +1,16 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { SITE } from "../data/projects.js";
+import { useProjects } from "../context/ProjectsContext.jsx";
 
 export default function Footer() {
+  const { data, loading } = useProjects();
   const year = new Date().getFullYear();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+
+  if (loading || !data) return null;
+
+  const { SITE } = data;
 
   return (
     <footer className="footer site-footer">

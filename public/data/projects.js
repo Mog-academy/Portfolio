@@ -18,8 +18,8 @@ export const SITE = {
 export const PROJECTS = [
   {
     slug: "kosas-sephora-middle-east-launch",
-    brand: "KOSASsss",
-    title: "KOSASsss",
+    brand: "KOSAS",
+    title: "KOSAS",
     subtitle: "A multi-venue launch experience that brought Kosas to the Middle East with bold, Instagrammable moments.",
     cover: {
       src: "/project_images/media-1.jpg",

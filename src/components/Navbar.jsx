@@ -1,8 +1,13 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { SITE } from "../data/projects.js";
+import { useProjects } from "../context/ProjectsContext.jsx";
 
 export default function Navbar() {
+  const { data, loading } = useProjects();
+
+  if (loading || !data) return null;
+
+  const { SITE } = data;
   return (
     <div className="sidebar-inner">
       <nav className="sidebar-nav" aria-label="Primary">

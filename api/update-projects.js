@@ -1,4 +1,5 @@
-// Vercel Serverless Function for updating projects.js file on GitHub
+// Vercel Serverless Function for updating projects.json in Blob Storage
+import { put } from '@vercel/blob';
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -35,76 +36,25 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing fileContent' });
     }
 
-    // GitHub API configuration
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const REPO_OWNER = process.env.REPO_OWNER || 'mog-academy';
-    const REPO_NAME = process.env.REPO_NAME || 'Portfolio';
-    const BRANCH = process.env.BRANCH || 'gh-pages';
-    
-    if (!GITHUB_TOKEN) {
-      return res.status(500).json({ error: 'GitHub token not configured' });
-    }
-
-    // Update projects.js file on gh-pages branch
-    const path = 'data/projects.js';
-    const githubUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
-    
-    // Get current file SHA
-    let sha = null;
-    try {
-      const checkResponse = await fetch(`${githubUrl}?ref=${BRANCH}`, {
-        headers: {
-          'Authorization': `token ${GITHUB_TOKEN}`,
-          'Accept': 'application/vnd.github.v3+json',
-        },
-      });
-      if (checkResponse.ok) {
-        const existingFile = await checkResponse.json();
-        sha = existingFile.sha;
-      }
-    } catch (e) {
-      console.log('File does not exist yet');
-    }
-
-    // Encode content to base64
-    const contentBase64 = Buffer.from(fileContent).toString('base64');
-
-    // Upload/Update file
-    const uploadResponse = await fetch(githubUrl, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: `Update projects data via editor`,
-        content: contentBase64,
-        branch: BRANCH,
-        ...(sha && { sha }),
-      }),
+    // Upload to Vercel Blob
+    const blob = await put('projects.json', fileContent, {
+      access: 'public',
+      contentType: 'application/json',
     });
-
-    if (!uploadResponse.ok) {
-      const error = await uploadResponse.text();
-      throw new Error(`GitHub API error: ${error}`);
-    }
-
-    const result = await uploadResponse.json();
     
-    console.log(`✓ Updated: ${path} on ${BRANCH} branch`);
+    console.log(`✓ Updated projects.json in Blob Storage: ${blob.url}`);
     
     res.status(200).json({ 
       success: true, 
-      message: 'Projects file updated successfully. GitHub Pages will rebuild automatically.',
-      commitUrl: result.commit?.html_url
+      message: 'Projects file updated successfully in Blob Storage.',
+      url: blob.url
     });
 
   } catch (error) {
     console.error('Update error:', error);
     res.status(500).json({ 
       error: error.message,
-      details: 'Failed to update projects file on GitHub'
+      details: 'Failed to update projects file in Blob Storage'
     });
   }
 }

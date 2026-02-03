@@ -1,7 +1,12 @@
 import React from "react";
-import { SITE } from "../data/projects.js";
+import { useProjects } from "../context/ProjectsContext.jsx";
 
 export default function SocialBar() {
+  const { data, loading } = useProjects();
+
+  if (loading || !data) return null;
+
+  const { SITE } = data;
   return (
     <div className="social-bar">
       <div className="social-header">

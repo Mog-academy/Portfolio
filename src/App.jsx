@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { ProjectsProvider } from "./context/ProjectsContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import SocialBar from "./components/SocialBar.jsx";
@@ -13,23 +14,25 @@ import ProjectEditor from "./pages/ProjectEditor.jsx";
 
 export default function App() {
   return (
-    <div className="app-shell layout">
-      <ScrollToTop />
-      <aside className="sidebar">
-        <Navbar />
-      </aside>
+    <ProjectsProvider>
+      <div className="app-shell layout">
+        <ScrollToTop />
+        <aside className="sidebar">
+          <Navbar />
+        </aside>
 
-      <main className="app-main content-area">
-        <SocialBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/philosophy" element={<Philosophy />} />
-          <Route path="/editing" element={<PasswordProtect><ProjectEditor /></PasswordProtect>} />
-          <Route path="/project/:slug" element={<Project />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <main className="app-main content-area">
+          <SocialBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/philosophy" element={<Philosophy />} />
+            <Route path="/editing" element={<PasswordProtect><ProjectEditor /></PasswordProtect>} />
+            <Route path="/project/:slug" element={<Project />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         <Footer />
       </main>
     </div>
+    </ProjectsProvider>
   );
 }

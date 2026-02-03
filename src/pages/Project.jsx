@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getProjectBySlug } from "../data/projects.js";
+import { useProjects, getProjectBySlug } from "../context/ProjectsContext.jsx";
 import Section from "../components/Section.jsx";
 
 function Paragraphs({ text }) {
@@ -71,8 +71,14 @@ function SectionGallery({ images, brand, onImageClick }) {
 
 export default function Project() {
   const { slug } = useParams();
-  const project = getProjectBySlug(slug);
+  const { data, loading } = useProjects();
   const [lightboxMedia, setLightboxMedia] = useState(null);
+
+  if (loading || !data) {
+    return <div className="container"><p>Loading...</p></div>;
+  }
+
+  const project = getProjectBySlug(data.PROJECTS, slug);
 
   if (!project) {
     return (
