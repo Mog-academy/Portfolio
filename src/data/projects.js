@@ -22,7 +22,7 @@ export const PROJECTS = [
     title: "KOSAS",
     subtitle: "A multi-venue launch experience that brought Kosas to the Middle East with bold, Instagrammable moments.",
     cover: {
-      src: "/project_images/media-1.jpg",
+      src: "/public/project_images/media-1.jpg",
       alt: "Event installation"
     },
     gallery: ["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1800&q=80"],
