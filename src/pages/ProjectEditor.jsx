@@ -324,7 +324,8 @@ export default function ProjectEditor() {
           });
 
           if (response.ok) {
-            const filePath = `/project_images/${filename}`;
+            const result = await response.json();
+            const filePath = result.path; // Use the blob URL from response
             uploadedPaths.push({ ...item, filePath });
             savedCount++;
             console.log(`✓ Saved: ${filename}`);
