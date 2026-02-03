@@ -43,6 +43,7 @@ export default async function handler(req, res) {
     // Upload to Vercel Blob
     const blob = await put(`project_images/${filename}`, buffer, {
       access: 'public',
+      addRandomSuffix: true,
     });
     
     console.log(`✓ Uploaded: ${filename} to Blob Storage`);
