@@ -1,5 +1,7 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
-  ]
+  ],
+  "buildCommand": "echo 'Skipping build - API functions only'",
+  "outputDirectory": "api"
 }
