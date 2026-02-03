@@ -1,489 +1,270 @@
-{
-  "SITE": {
-    "name": "Mohamed Elgaili",
-    "role": "Creative Producer",
-    "location": "Dubai, UAE",
-    "headline": "I design experiences, not just spaces.",
-    "intro": "I turn brand vision into immersive moments that people remember — balancing emotion, storytelling, and precision from concept to reality.",
-    "contact": {
-      "email": "mjeeliabadi@gmail.com",
-      "instagram": "https://www.instagram.com/mo.egaili/",
-      "linkedin": "https://www.linkedin.com/in/mohamed-elgaili-ali/",
-      "whatsapp": "+971509320937"
-    }
+// Edit this file to add / update projects.
+// Replace image placeholders with your real images later.
+
+export const SITE = {
+  name: "Mohamed Elgaili",
+  role: "Creative Producer",
+  location: "Dubai, UAE",
+  headline: "I design experiences, not just spaces.",
+  intro: "I turn brand vision into immersive moments that people remember — balancing emotion, storytelling, and precision from concept to reality.",
+  contact: {
+    email: "mjeeliabadi@gmail.com",
+    instagram: "https://www.instagram.com/mo.egaili/",
+    linkedin: "https://www.linkedin.com/in/mohamed-elgaili-ali/",
+    whatsapp: "+971509320937"
+  }
+};
+
+export const PROJECTS = [
+  {
+    slug: "kosas-sephora-middle-east-launch",
+    brand: "KOSAS",
+    title: "KOSAS",
+    subtitle: "A multi-venue launch experience that brought Kosas to the Middle East with bold, Instagrammable moments.",
+    cover: {
+      src: "/project_images/media-1.jpg",
+      alt: "Event installation"
+    },
+    gallery: ["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1800&q=80"],
+    sections: [
+      {
+        heading: "Project Overview",
+        body: "Kosas, Sephora's cult-favorite makeup brand, debuted in the Middle East with a launch event designed to be as bold and shareable as its identity. The challenge was to brand three separate venues — each with a unique function — while maintaining one cohesive Kosas experience. Our goal: create 'wow' moments at every touchpoint to drive organic social coverage and establish Kosas as a disruptive new voice in the region.",
+        gallery: ["/project_images/media-7.jpg", "/project_images/media-8.jpg", "/project_images/media-9.jpg", "/project_images/media-10.jpg", "/project_images/media-11.jpg", "/project_images/media-12.jpg"]
+      },
+      {
+        heading: "Experience Design",
+        body: "Guests entered a world built for discovery and sharing. Professional makeup artists welcomed them at branded stations, while a photowall with a life-sized product mockup invited instant Instagram moments. A striking ice sculpture created the illusion of lip gloss gliding onto a model's lips, turning a simple product trial into a spectacle. Projected brand films pulsed across the venue, shelves of gift bags doubled as design features, and a cake-shaped stand — topped with an actual cake — blurred the line between product display and playful storytelling.\n\nAcross the additional venues, the experience shifted into more intimate gatherings with seating and masterclass-style engagement — maintaining the same Kosas energy while adapting to a smaller, more private scale.",
+        gallery: ["https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&h=600&fit=crop", "https://images.unsplash.com/photo-1511705098154-b7e1b7edc37a?w=600&h=600&fit=crop", "https://images.unsplash.com/photo-1622368656925-d2bd6d7b7fd7?w=600&h=600&fit=crop"]
+      },
+      {
+        heading: "My Role",
+        body: "As Creative Producer, I took the initial flow sketched by the general manager and transformed it into a fully realized, multi-venue experience. I translated the plan into spatial designs, custom installations, and branded furniture that reflected Kosas' playful identity while staying true to their guidelines and color palette. I created 3D renders to help the client visualize the concept, then developed detailed technical drawings and worked closely with suppliers to ensure everything was feasible and executed to the highest standard. On-site, I supervised every installation, orchestrating teams and logistics across all three venues to ensure the final experience matched the approved vision and delivered the 'wow' factor at every touchpoint.",
+        gallery: ["/project_images/media-13.jpg", "/project_images/media-14.png", "/project_images/media-15.jpg", "/project_images/media-16.jpg", "/project_images/media-17.jpg", "/project_images/media-18.jpg", "/project_images/media-19.jpg", "/project_images/media-20.jpg", "/project_images/media-21.jpg", "/project_images/media-22.jpg", "/project_images/media-23.jpg", "/project_images/media-24.jpg"]
+      },
+      {
+        heading: "Execution",
+        body: "The Kosas event was one of the most demanding projects I've executed, marked by scale, tight deadlines, and constant client changes. I began by coordinating closely with suppliers, while building live Excel and PowerPoint trackers to log every update — from sizes to Pantone codes and placements — ensuring everyone stayed aligned in real time. This system kept production moving smoothly despite shifting requirements. When it came time to bring everything to life, I supervised the on-site installation starting at 2 a.m., guiding the supplier team through the setup. By 6 p.m., the venue was flawless and ready for launch — proof that even under pressure, precision and timing never slipped.",
+        gallery: ["/project_images/media-25.jpg", "/project_images/media-26.jpg", "/project_images/media-27.jpg", "/project_images/media-28.jpg", "/project_images/media-29.jpg"]
+      },
+      {
+        heading: "Impact",
+        body: "The launch achieved millions of impressions on Instagram, with guests and influencers sharing their experiences widely. Every image and video you see here was captured by attendees themselves — a testament to how engaging, interactive, and photogenic the spaces were. The event not only introduced Kosas with impact but also led to three additional projects commissioned by the brand.",
+        gallery: ["/project_images/media-30.mp4", "/project_images/media-31.mp4", "/project_images/media-32.mp4", "/project_images/media-33.mp4", "/project_images/media-34.mp4"]
+      }
+    ],
+    tags: ["Launch", "Experiential", "Multi-venue", "3D", "Production"]
   },
-  "PROJECTS": [
-    {
-      "slug": "kosas-sephora-middle-east-launch",
-      "brand": "KOSASsss",
-      "title": "KOSASsss",
-      "subtitle": "A multi-venue launch experience that brought Kosas to the Middle East with bold, Instagrammable moments.",
-      "cover": {
-        "src": "/project_images/media-1.jpg",
-        "alt": "Event installation"
-      },
-      "gallery": [
-        "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1800&q=80"
-      ],
-      "sections": [
-        {
-          "heading": "Project Overview",
-          "body": "Kosas, Sephora's cult-favorite makeup brand, debuted in the Middle East with a launch event designed to be as bold and shareable as its identity. The challenge was to brand three separate venues — each with a unique function — while maintaining one cohesive Kosas experience. Our goal: create 'wow' moments at every touchpoint to drive organic social coverage and establish Kosas as a disruptive new voice in the region.",
-          "gallery": [
-            "/project_images/media-7.jpg",
-            "/project_images/media-8.jpg",
-            "/project_images/media-9.jpg",
-            "/project_images/media-10.jpg",
-            "/project_images/media-11.jpg",
-            "/project_images/media-12.jpg"
-          ]
-        },
-        {
-          "heading": "Experience Design",
-          "body": "Guests entered a world built for discovery and sharing. Professional makeup artists welcomed them at branded stations, while a photowall with a life-sized product mockup invited instant Instagram moments. A striking ice sculpture created the illusion of lip gloss gliding onto a model's lips, turning a simple product trial into a spectacle. Projected brand films pulsed across the venue, shelves of gift bags doubled as design features, and a cake-shaped stand — topped with an actual cake — blurred the line between product display and playful storytelling.\n\nAcross the additional venues, the experience shifted into more intimate gatherings with seating and masterclass-style engagement — maintaining the same Kosas energy while adapting to a smaller, more private scale.",
-          "gallery": [
-            "https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1511705098154-b7e1b7edc37a?w=600&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1622368656925-d2bd6d7b7fd7?w=600&h=600&fit=crop"
-          ]
-        },
-        {
-          "heading": "My Role",
-          "body": "As Creative Producer, I took the initial flow sketched by the general manager and transformed it into a fully realized, multi-venue experience. I translated the plan into spatial designs, custom installations, and branded furniture that reflected Kosas' playful identity while staying true to their guidelines and color palette. I created 3D renders to help the client visualize the concept, then developed detailed technical drawings and worked closely with suppliers to ensure everything was feasible and executed to the highest standard. On-site, I supervised every installation, orchestrating teams and logistics across all three venues to ensure the final experience matched the approved vision and delivered the 'wow' factor at every touchpoint.",
-          "gallery": [
-            "/project_images/media-13.jpg",
-            "/project_images/media-14.png",
-            "/project_images/media-15.jpg",
-            "/project_images/media-16.jpg",
-            "/project_images/media-17.jpg",
-            "/project_images/media-18.jpg",
-            "/project_images/media-19.jpg",
-            "/project_images/media-20.jpg",
-            "/project_images/media-21.jpg",
-            "/project_images/media-22.jpg",
-            "/project_images/media-23.jpg",
-            "/project_images/media-24.jpg"
-          ]
-        },
-        {
-          "heading": "Execution",
-          "body": "The Kosas event was one of the most demanding projects I've executed, marked by scale, tight deadlines, and constant client changes. I began by coordinating closely with suppliers, while building live Excel and PowerPoint trackers to log every update — from sizes to Pantone codes and placements — ensuring everyone stayed aligned in real time. This system kept production moving smoothly despite shifting requirements. When it came time to bring everything to life, I supervised the on-site installation starting at 2 a.m., guiding the supplier team through the setup. By 6 p.m., the venue was flawless and ready for launch — proof that even under pressure, precision and timing never slipped.",
-          "gallery": [
-            "/project_images/media-25.jpg",
-            "/project_images/media-26.jpg",
-            "/project_images/media-27.jpg",
-            "/project_images/media-28.jpg",
-            "/project_images/media-29.jpg"
-          ]
-        },
-        {
-          "heading": "Impact",
-          "body": "The launch achieved millions of impressions on Instagram, with guests and influencers sharing their experiences widely. Every image and video you see here was captured by attendees themselves — a testament to how engaging, interactive, and photogenic the spaces were. The event not only introduced Kosas with impact but also led to three additional projects commissioned by the brand.",
-          "gallery": [
-            "/project_images/media-30.mp4",
-            "/project_images/media-31.mp4",
-            "/project_images/media-32.mp4",
-            "/project_images/media-33.mp4",
-            "/project_images/media-34.mp4"
-          ]
-        }
-      ],
-      "tags": [
-        "Launch",
-        "Experiential",
-        "Multi-venue",
-        "3D",
-        "Production"
-      ]
+  {
+    slug: "marli-ramadan-suhoor",
+    brand: "Marli",
+    title: "MARLI",
+    subtitle: "A refined and immersive evening experience combining jewelry discovery, social engagement, and the spirit of Ramadan.",
+    cover: {
+      src: "/project_images/media-2.jpg",
+      alt: "Luxury evening event"
     },
-    {
-      "slug": "marli-ramadan-suhoor",
-      "brand": "Marli",
-      "title": "MARLI",
-      "subtitle": "A refined and immersive evening experience combining jewelry discovery, social engagement, and the spirit of Ramadan.",
-      "cover": {
-        "src": "/project_images/media-2.jpg",
-        "alt": "Luxury evening event"
+    gallery: ["https://images.unsplash.com/photo-1519682577862-22b62b24e493?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1800&q=80"],
+    sections: [
+      {
+        heading: "Project Overview",
+        body: "Marli, the renowned New York–based jewelry brand, hosted a Ramadan Suhoor to introduce its collection to guests in Dubai. The challenge was to create an elegant, interactive environment that encouraged conversation, jewelry trials, and social sharing, while reflecting both the brand’s identity and the cultural significance of Ramadan.",
+        gallery: ["/project_images/media-35.jpg", "/project_images/media-36.jpg", "/project_images/media-37.jpg", "/project_images/media-38.jpg", "/project_images/media-39.jpg", "/project_images/media-40.jpg", "/project_images/media-41.jpg"]
       },
-      "gallery": [
-        "https://images.unsplash.com/photo-1519682577862-22b62b24e493?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1800&q=80"
-      ],
-      "sections": [
-        {
-          "heading": "Project Overview",
-          "body": "Marli, the renowned New York–based jewelry brand, hosted a Ramadan Suhoor to introduce its collection to guests in Dubai. The challenge was to create an elegant, interactive environment that encouraged conversation, jewelry trials, and social sharing, while reflecting both the brand’s identity and the cultural significance of Ramadan.",
-          "gallery": [
-            "/project_images/media-35.jpg",
-            "/project_images/media-36.jpg",
-            "/project_images/media-37.jpg",
-            "/project_images/media-38.jpg",
-            "/project_images/media-39.jpg",
-            "/project_images/media-40.jpg",
-            "/project_images/media-41.jpg"
-          ]
-        },
-        {
-          "heading": "Experience Design",
-          "body": "Guests entered through backlit arches glowing in the brand’s signature blue, setting an elegant and inviting tone. Inside, product displays and two photowalls — one with brand logos, another filled with black sand — created a magical atmosphere aligned with the Ramadan theme. A drawing activity invited guests to contribute a block that collectively formed a pyramid, adding a human, participatory layer to the evening. Suhoor tied everything together as a warm, culturally grounded moment."
-        },
-        {
-          "heading": "My Role",
-          "body": "As Creative Producer, I carefully studied Marli’s brand identity, guidelines, and expectations for the Ramadan Suhoor, alongside the general manager’s brief outlining the activities and context of the event. From there, I explored the spatial possibilities and conceptualized installations that would balance elegance, interactivity, and cultural nuance. I determined the shapes, sizes, and layout of the arches, photowalls, and product displays, producing 3D renders to help visualize the concept and refine it before client approval. Every decision was guided by the brand’s identity, the intended guest experience, and the flow of the event, resulting in a cohesive and immersive design.",
-          "gallery": [
-            "/project_images/media-42.jpg",
-            "/project_images/media-43.jpg",
-            "/project_images/media-44.jpg",
-            "/project_images/media-45.jpg",
-            "/project_images/media-46.jpg",
-            "/project_images/media-47.jpg",
-            "/project_images/media-48.jpg",
-            "/project_images/media-49.jpg",
-            "/project_images/media-50.jpg",
-            "/project_images/media-51.jpg",
-            "/project_images/media-52.jpg",
-            "/project_images/media-53.jpg",
-            "/project_images/media-54.jpg",
-            "/project_images/media-55.jpg",
-            "/project_images/media-56.jpg"
-          ]
-        },
-        {
-          "heading": "Execution",
-          "body": "The event required close coordination across multiple deliverables and suppliers. I collaborated with production partners using 3D renders and technical drawings to maintain alignment. I also designed graphics for disposable cameras gifted to guests, along with other branded touchpoints such as napkins and bags — ensuring every detail felt cohesive with the brand. On-site, the installation was guided with attention to finish quality and spatial balance so the final environment matched the intended mood."
-        },
-        {
-          "heading": "Impact",
-          "body": "The Suhoor was well-received and generated social media buzz, highlighting the experience’s elegance and guest participation. The success of the event led to additional collaborations across the region, extending the concept into future gatherings.",
-          "gallery": [
-            "/project_images/media-57.mp4",
-            "/project_images/media-58.mp4"
-          ]
-        }
-      ],
-      "tags": [
-        "Luxury",
-        "Hospitality",
-        "Brand experience",
-        "3D",
-        "Production"
-      ]
+      {
+        heading: "Experience Design",
+        body: "Guests entered through backlit arches glowing in the brand’s signature blue, setting an elegant and inviting tone. Inside, product displays and two photowalls — one with brand logos, another filled with black sand — created a magical atmosphere aligned with the Ramadan theme. A drawing activity invited guests to contribute a block that collectively formed a pyramid, adding a human, participatory layer to the evening. Suhoor tied everything together as a warm, culturally grounded moment."
+      },
+      {
+        heading: "My Role",
+        body: "As Creative Producer, I carefully studied Marli’s brand identity, guidelines, and expectations for the Ramadan Suhoor, alongside the general manager’s brief outlining the activities and context of the event. From there, I explored the spatial possibilities and conceptualized installations that would balance elegance, interactivity, and cultural nuance. I determined the shapes, sizes, and layout of the arches, photowalls, and product displays, producing 3D renders to help visualize the concept and refine it before client approval. Every decision was guided by the brand’s identity, the intended guest experience, and the flow of the event, resulting in a cohesive and immersive design.",
+        gallery: ["/project_images/media-42.jpg", "/project_images/media-43.jpg", "/project_images/media-44.jpg", "/project_images/media-45.jpg", "/project_images/media-46.jpg", "/project_images/media-47.jpg", "/project_images/media-48.jpg", "/project_images/media-49.jpg", "/project_images/media-50.jpg", "/project_images/media-51.jpg", "/project_images/media-52.jpg", "/project_images/media-53.jpg", "/project_images/media-54.jpg", "/project_images/media-55.jpg", "/project_images/media-56.jpg"]
+      },
+      {
+        heading: "Execution",
+        body: "The event required close coordination across multiple deliverables and suppliers. I collaborated with production partners using 3D renders and technical drawings to maintain alignment. I also designed graphics for disposable cameras gifted to guests, along with other branded touchpoints such as napkins and bags — ensuring every detail felt cohesive with the brand. On-site, the installation was guided with attention to finish quality and spatial balance so the final environment matched the intended mood."
+      },
+      {
+        heading: "Impact",
+        body: "The Suhoor was well-received and generated social media buzz, highlighting the experience’s elegance and guest participation. The success of the event led to additional collaborations across the region, extending the concept into future gatherings.",
+        gallery: ["/project_images/media-57.mp4", "/project_images/media-58.mp4"]
+      }
+    ],
+    tags: ["Luxury", "Hospitality", "Brand experience", "3D", "Production"]
+  },
+  {
+    slug: "vilhelm-perfumerie-new-collection-launch",
+    brand: "Vilhelm Perfumerie",
+    title: "VILHELM PERFUMERIE",
+    subtitle: "A multi-sensory journey connecting scent, emotion, and atmosphere through the theme of the sun.",
+    cover: {
+      src: "/project_images/media-3.jpg",
+      alt: "Moody event lighting"
     },
-    {
-      "slug": "vilhelm-perfumerie-new-collection-launch",
-      "brand": "Vilhelm Perfumerie",
-      "title": "VILHELM PERFUMERIE",
-      "subtitle": "A multi-sensory journey connecting scent, emotion, and atmosphere through the theme of the sun.",
-      "cover": {
-        "src": "/project_images/media-3.jpg",
-        "alt": "Moody event lighting"
+    gallery: ["https://images.unsplash.com/photo-1520690223734-6f1e3d6cf6b1?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1510070009289-b5bc34383727?auto=format&fit=crop&w=1800&q=80"],
+    sections: [
+      {
+        heading: "Project Overview",
+        body: "Vilhelm Perfumerie wanted to showcase its new perfume collection in a way that was memorable, elegant, and emotionally engaging. The venue’s concrete aesthetic became a canvas to convey the warmth, energy, and radiance of the sun — the central theme of the collection.",
+        gallery: ["/project_images/1770063393743-g9aebhpbq.jpg", "/project_images/1770063393743-hw43k7uvz.jpg", "/project_images/1770063393742-hpiw9fdft.jpg", "/project_images/1770063393743-19qh64uu3.jpg", "/project_images/1770063393743-v1b78zxk7.jpg"]
       },
-      "gallery": [
-        "https://images.unsplash.com/photo-1520690223734-6f1e3d6cf6b1?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1510070009289-b5bc34383727?auto=format&fit=crop&w=1800&q=80"
-      ],
-      "sections": [
-        {
-          "heading": "Project Overview",
-          "body": "Vilhelm Perfumerie wanted to showcase its new perfume collection in a way that was memorable, elegant, and emotionally engaging. The venue’s concrete aesthetic became a canvas to convey the warmth, energy, and radiance of the sun — the central theme of the collection.",
-          "gallery": [
-            "/project_images/1770063393743-g9aebhpbq.jpg",
-            "/project_images/1770063393743-hw43k7uvz.jpg",
-            "/project_images/1770063393742-hpiw9fdft.jpg",
-            "/project_images/1770063393743-19qh64uu3.jpg",
-            "/project_images/1770063393743-v1b78zxk7.jpg"
-          ]
-        },
-        {
-          "heading": "Experience Design",
-          "body": "Guests moved through a curated sequence of five spaces designed to evoke emotion and connection. The journey began with anticipation at an entrance photowall, then unfolded into rooms that encouraged writing, painting, and reflection — including a mirrored space with affirmations. The final room presented the three perfumes in dramatic, moody lighting, tying the narrative together. Beyond the rooms, an expressive dance performance and social bars created a warm, communal atmosphere where the theme felt alive."
-        },
-        {
-          "heading": "My Role",
-          "body": "As Creative Producer, I studied the brand identity and client brief to define the emotional tone of the event. I translated the concept into spatial design, interactive installations, and a coherent guest journey. I produced 3D renders to visualize the concept and developed technical drawings for production. Every creative decision — from lighting to room layouts — reflected the brand’s identity and the thematic connection to the sun.",
-          "gallery": [
-            "/project_images/1770065029842-6g9rgeqgl.jpeg",
-            "/project_images/1770065029849-c6zcfudll.jpeg",
-            "/project_images/1770065029854-u7chq9el8.jpeg",
-            "/project_images/1770065029860-ofs6mkelz.jpeg",
-            "/project_images/1770065029865-jtw0dnl6r.jpeg",
-            "/project_images/1770065029871-f2r52gbaw.jpeg",
-            "/project_images/1770065029877-frvukuj7i.jpeg",
-            "/project_images/1770065029882-u387chamc.jpeg",
-            "/project_images/1770065029885-g70hzspux.jpeg",
-            "/project_images/1770065029892-8nchz9kfl.jpeg",
-            "/project_images/1770065029897-odttkfql0.jpeg",
-            "/project_images/1770065029900-emp1ai9hd.jpeg",
-            "/project_images/1770065029908-rr0chgaly.jpeg",
-            "/project_images/1770065029913-ptu7lchkh.jpeg",
-            "/project_images/1770065029918-jqd2rwt28.jpeg",
-            "/project_images/1770065029922-medaxv2iv.jpeg",
-            "/project_images/1770065029925-kb8vl5bq2.jpeg"
-          ]
-        },
-        {
-          "heading": "Execution",
-          "body": "Bringing the concept to life meant stepping into a constant stream of challenges. From projector file-format limitations to achieving a perfectly scaled projected circle, I worked through technical constraints until the system performed flawlessly. Budget pressure required smart material choices for bars and tables, preserving the design language while staying within constraints. I was proactive throughout — producing the projection video myself to maintain creative continuity and avoid external handoffs. With tight timelines, I supervised the on-site build to ensure every detail landed with the intended mood and precision.",
-          "gallery": [
-            "/project_images/1770065741861-qmn3k56ti.jpeg",
-            "/project_images/1770065741867-l6dxq8dla.jpeg",
-            "/project_images/1770065741869-ipy0rs74r.jpeg",
-            "/project_images/1770065741871-p1ilmhjls.jpeg",
-            "/project_images/1770065741873-x6acuxsl6.jpeg",
-            "/project_images/1770065741875-x8jl8m7pq.jpeg",
-            "/project_images/1770065741877-asr0emzh5.jpeg"
-          ]
-        },
-        {
-          "heading": "Impact",
-          "body": "The launch created an emotionally resonant experience that drew attention both in-person and online. Guests engaged deeply with the journey, while standout moments generated social buzz and reinforced the brand’s positioning through experience, not just display.",
-          "gallery": [
-            "/project_images/1770065843431-blup6x8ch.mp4",
-            "/project_images/1770065843456-t4xnqijnq.mp4",
-            "/project_images/1770065843461-n2bk3itj2.mp4"
-          ]
-        }
-      ],
-      "tags": [
-        "Immersive",
-        "Scent story",
-        "Lighting",
-        "3D",
-        "Execution"
-      ]
+      {
+        heading: "Experience Design",
+        body: "Guests moved through a curated sequence of five spaces designed to evoke emotion and connection. The journey began with anticipation at an entrance photowall, then unfolded into rooms that encouraged writing, painting, and reflection — including a mirrored space with affirmations. The final room presented the three perfumes in dramatic, moody lighting, tying the narrative together. Beyond the rooms, an expressive dance performance and social bars created a warm, communal atmosphere where the theme felt alive."
+      },
+      {
+        heading: "My Role",
+        body: "As Creative Producer, I studied the brand identity and client brief to define the emotional tone of the event. I translated the concept into spatial design, interactive installations, and a coherent guest journey. I produced 3D renders to visualize the concept and developed technical drawings for production. Every creative decision — from lighting to room layouts — reflected the brand’s identity and the thematic connection to the sun.",
+        gallery: ["/project_images/1770065029842-6g9rgeqgl.jpeg", "/project_images/1770065029849-c6zcfudll.jpeg", "/project_images/1770065029854-u7chq9el8.jpeg", "/project_images/1770065029860-ofs6mkelz.jpeg", "/project_images/1770065029865-jtw0dnl6r.jpeg", "/project_images/1770065029871-f2r52gbaw.jpeg", "/project_images/1770065029877-frvukuj7i.jpeg", "/project_images/1770065029882-u387chamc.jpeg", "/project_images/1770065029885-g70hzspux.jpeg", "/project_images/1770065029892-8nchz9kfl.jpeg", "/project_images/1770065029897-odttkfql0.jpeg", "/project_images/1770065029900-emp1ai9hd.jpeg", "/project_images/1770065029908-rr0chgaly.jpeg", "/project_images/1770065029913-ptu7lchkh.jpeg", "/project_images/1770065029918-jqd2rwt28.jpeg", "/project_images/1770065029922-medaxv2iv.jpeg", "/project_images/1770065029925-kb8vl5bq2.jpeg"]
+      },
+      {
+        heading: "Execution",
+        body: "Bringing the concept to life meant stepping into a constant stream of challenges. From projector file-format limitations to achieving a perfectly scaled projected circle, I worked through technical constraints until the system performed flawlessly. Budget pressure required smart material choices for bars and tables, preserving the design language while staying within constraints. I was proactive throughout — producing the projection video myself to maintain creative continuity and avoid external handoffs. With tight timelines, I supervised the on-site build to ensure every detail landed with the intended mood and precision.",
+        gallery: ["/project_images/1770065741861-qmn3k56ti.jpeg", "/project_images/1770065741867-l6dxq8dla.jpeg", "/project_images/1770065741869-ipy0rs74r.jpeg", "/project_images/1770065741871-p1ilmhjls.jpeg", "/project_images/1770065741873-x6acuxsl6.jpeg", "/project_images/1770065741875-x8jl8m7pq.jpeg", "/project_images/1770065741877-asr0emzh5.jpeg"]
+      },
+      {
+        heading: "Impact",
+        body: "The launch created an emotionally resonant experience that drew attention both in-person and online. Guests engaged deeply with the journey, while standout moments generated social buzz and reinforced the brand’s positioning through experience, not just display.",
+        gallery: ["/project_images/1770065843431-blup6x8ch.mp4", "/project_images/1770065843456-t4xnqijnq.mp4", "/project_images/1770065843461-n2bk3itj2.mp4"]
+      }
+    ],
+    tags: ["Immersive", "Scent story", "Lighting", "3D", "Execution"]
+  },
+  {
+    slug: "house-of-maybourne-vip-event",
+    brand: "House of Maybourne",
+    title: "HOUSE OF MAYBOURNE",
+    subtitle: "A distinctly British evening designed to bring VIP guests together through London-style elegance.",
+    cover: {
+      src: "/project_images/media-4.jpg",
+      alt: "Elegant event hall"
     },
-    {
-      "slug": "house-of-maybourne-vip-event",
-      "brand": "House of Maybourne",
-      "title": "HOUSE OF MAYBOURNE",
-      "subtitle": "A distinctly British evening designed to bring VIP guests together through London-style elegance.",
-      "cover": {
-        "src": "/project_images/media-4.jpg",
-        "alt": "Elegant event hall"
+    gallery: ["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1542314831-060cd1dbfeeb?auto=format&fit=crop&w=1800&q=80"],
+    sections: [
+      {
+        heading: "Project Overview",
+        body: "The intention was simple: connect VIP customers in an atmosphere that felt unmistakably British — elegant, understated, and timeless. The event needed to translate London sophistication into every detail, from flooring and furniture to music and social flow.",
+        gallery: ["/project_images/1770066502591-ef7zsyb50.jpeg", "/project_images/1770066502623-v9kjne1j8.jpeg", "/project_images/1770066502627-2pcmffps1.jpeg", "/project_images/1770066502630-tg3iuh9pn.jpeg", "/project_images/1770066502632-trqvlu92i.jpeg", "/project_images/1770066502635-2fhxwu56k.jpeg"]
       },
-      "gallery": [
-        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1542314831-060cd1dbfeeb?auto=format&fit=crop&w=1800&q=80"
-      ],
-      "sections": [
-        {
-          "heading": "Project Overview",
-          "body": "The intention was simple: connect VIP customers in an atmosphere that felt unmistakably British — elegant, understated, and timeless. The event needed to translate London sophistication into every detail, from flooring and furniture to music and social flow.",
-          "gallery": [
-            "/project_images/1770066502591-ef7zsyb50.jpeg",
-            "/project_images/1770066502623-v9kjne1j8.jpeg",
-            "/project_images/1770066502627-2pcmffps1.jpeg",
-            "/project_images/1770066502630-tg3iuh9pn.jpeg",
-            "/project_images/1770066502632-trqvlu92i.jpeg",
-            "/project_images/1770066502635-2fhxwu56k.jpeg"
-          ]
-        },
-        {
-          "heading": "Experience Design",
-          "body": "A grand checkered floor anchored the hall and set the tone immediately. Lounge seating and a refined bar encouraged conversation, while soft classical music carried the mood throughout the evening. Everything — materials, proportions, and layout — was curated to feel coherent, calm, and premium."
-        },
-        {
-          "heading": "My Role",
-          "body": "As Creative Producer, I grounded the design in brand identity and the event’s social intention. I produced photorealistic 3D renders to secure approval and ensure confidence in the final look. I also recreated the venue and rental furniture in 3D to remove uncertainty, ensuring seamless fit and preventing last-minute adjustments.",
-          "gallery": [
-            "/project_images/1770066502637-s83dkafsy.jpeg",
-            "/project_images/1770066502641-1xlx067if.jpeg",
-            "/project_images/1770066502654-u2y9af39q.jpeg",
-            "/project_images/1770066502661-9gqudppej.jpeg",
-            "/project_images/1770066502666-al075icip.jpeg",
-            "/project_images/1770066502673-y7spmxzkp.jpeg",
-            "/project_images/1770066502681-j9n4xu4ec.jpeg"
-          ]
-        },
-        {
-          "heading": "Execution",
-          "body": "The key technical challenge was the checkered floor: it had to be printed in stitched segments. I prepared print-ready files accounting for panel cuts, overlaps, and alignment — coordinating closely with the supplier to ensure a seamless final pattern. With a one-week turnaround for design, production, and installation, precision mattered. I supervised the floor installation and ensured the built result matched what was approved in renders.",
-          "gallery": [
-            "/project_images/1770066502687-2ls5kxvwj.jpeg"
-          ]
-        },
-        {
-          "heading": "Impact",
-          "body": "The event’s elegance resonated strongly with guests and extended beyond the venue through social buzz. The evening reinforced Maybourne’s presence in Dubai with a sense of belonging, refinement, and pride — a celebration that felt both emotionally warm and brand-defining.",
-          "gallery": [
-            "/project_images/1770066502689-1nsc3an6l.mp4"
-          ]
-        }
-      ],
-      "tags": [
-        "VIP",
-        "Luxury hospitality",
-        "3D accuracy",
-        "Production"
-      ]
+      {
+        heading: "Experience Design",
+        body: "A grand checkered floor anchored the hall and set the tone immediately. Lounge seating and a refined bar encouraged conversation, while soft classical music carried the mood throughout the evening. Everything — materials, proportions, and layout — was curated to feel coherent, calm, and premium."
+      },
+      {
+        heading: "My Role",
+        body: "As Creative Producer, I grounded the design in brand identity and the event’s social intention. I produced photorealistic 3D renders to secure approval and ensure confidence in the final look. I also recreated the venue and rental furniture in 3D to remove uncertainty, ensuring seamless fit and preventing last-minute adjustments.",
+        gallery: ["/project_images/1770066502637-s83dkafsy.jpeg", "/project_images/1770066502641-1xlx067if.jpeg", "/project_images/1770066502654-u2y9af39q.jpeg", "/project_images/1770066502661-9gqudppej.jpeg", "/project_images/1770066502666-al075icip.jpeg", "/project_images/1770066502673-y7spmxzkp.jpeg", "/project_images/1770066502681-j9n4xu4ec.jpeg"]
+      },
+      {
+        heading: "Execution",
+        body: "The key technical challenge was the checkered floor: it had to be printed in stitched segments. I prepared print-ready files accounting for panel cuts, overlaps, and alignment — coordinating closely with the supplier to ensure a seamless final pattern. With a one-week turnaround for design, production, and installation, precision mattered. I supervised the floor installation and ensured the built result matched what was approved in renders.",
+        gallery: ["/project_images/1770066502687-2ls5kxvwj.jpeg"]
+      },
+      {
+        heading: "Impact",
+        body: "The event’s elegance resonated strongly with guests and extended beyond the venue through social buzz. The evening reinforced Maybourne’s presence in Dubai with a sense of belonging, refinement, and pride — a celebration that felt both emotionally warm and brand-defining.",
+        gallery: ["/project_images/1770066502689-1nsc3an6l.mp4"]
+      }
+    ],
+    tags: ["VIP", "Luxury hospitality", "3D accuracy", "Production"]
+  },
+  {
+    slug: "bork-boutique-launch-dubai",
+    brand: "BORK",
+    title: "BORK",
+    subtitle: "A refined showcase introducing BORK’s boutique presence through tactile discovery, elevated social zones, and warm ambience.",
+    cover: {
+      src: "/project_images/media-5.jpg",
+      alt: "Modern event staging"
     },
-    {
-      "slug": "bork-boutique-launch-dubai",
-      "brand": "BORK",
-      "title": "BORK",
-      "subtitle": "A refined showcase introducing BORK’s boutique presence through tactile discovery, elevated social zones, and warm ambience.",
-      "cover": {
-        "src": "/project_images/media-5.jpg",
-        "alt": "Modern event staging"
+    gallery: ["https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1520690223734-6f1e3d6cf6b1?auto=format&fit=crop&w=1800&q=80"],
+    sections: [
+      {
+        heading: "Project Overview",
+        body: "BORK launched its boutique presence in Dubai with an event designed to introduce guests to the brand through experience — not just display. The objective was to create a calm, premium environment where guests could explore products while enjoying a social, hospitality-led atmosphere.",
+        gallery: ["/project_images/1770066639955-ikeegp6pg.jpeg", "/project_images/1770066639961-sw93rzw4b.jpeg", "/project_images/1770066639964-40gxxg4ro.jpeg", "/project_images/1770066639966-yagt64pc2.jpeg", "/project_images/1770066639968-ncqehjjnx.jpeg", "/project_images/1770066639971-jdv34t1fl.jpeg", "/project_images/1770066639973-g8kdkbl1f.jpeg", "/project_images/1770066639976-my7qc1q7g.jpeg", "/project_images/1770066639980-25ukywqnq.jpeg"]
       },
-      "gallery": [
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1520690223734-6f1e3d6cf6b1?auto=format&fit=crop&w=1800&q=80"
-      ],
-      "sections": [
-        {
-          "heading": "Project Overview",
-          "body": "BORK launched its boutique presence in Dubai with an event designed to introduce guests to the brand through experience — not just display. The objective was to create a calm, premium environment where guests could explore products while enjoying a social, hospitality-led atmosphere.",
-          "gallery": [
-            "/project_images/1770066639955-ikeegp6pg.jpeg",
-            "/project_images/1770066639961-sw93rzw4b.jpeg",
-            "/project_images/1770066639964-40gxxg4ro.jpeg",
-            "/project_images/1770066639966-yagt64pc2.jpeg",
-            "/project_images/1770066639968-ncqehjjnx.jpeg",
-            "/project_images/1770066639971-jdv34t1fl.jpeg",
-            "/project_images/1770066639973-g8kdkbl1f.jpeg",
-            "/project_images/1770066639976-my7qc1q7g.jpeg",
-            "/project_images/1770066639980-25ukywqnq.jpeg"
-          ]
-        },
-        {
-          "heading": "Experience Design",
-          "body": "The guest journey included a photowall featuring a mask installation and brand logo illuminated by warm orange lighting, setting an inviting tone. Inside, grazing tables encouraged conversation, complemented by lounge seating for relaxed interaction. A large table with a floral centerpiece added visual drama, while a glass wall with an emblem reinforced brand identity.\n\nA caviar bar elevated the hospitality experience, while a dedicated massage-chair room invited guests to test the product in comfort with music of their choice. Outdoors, the atmosphere shifted into a social, upbeat zone with a DJ, bar, cocktail tables, and space to dance and connect."
-        },
-        {
-          "heading": "My Role",
-          "body": "As Creative Producer, I translated the event vision into a clear spatial and visual system. I designed the event prints and ensured they fit precisely within the built environment, then produced the 3D renders that secured client alignment and approval. My focus was on cohesion — making sure every branded moment felt integrated, premium, and intentional within the guest flow.",
-          "gallery": [
-            "/project_images/1770066639982-uy0rvuj8v.png",
-            "/project_images/1770066640005-arxijsefj.jpeg",
-            "/project_images/1770066640009-38s6nb4me.jpeg"
-          ]
-        },
-        {
-          "heading": "Execution",
-          "body": "For execution, I authored the technical drawings that translated the concept into a buildable plan — especially around graphic placements and fit. The clarity of the documentation enabled the production team to deliver confidently without requiring my on-site supervision, demonstrating a smooth handoff and a well-structured workflow."
-        },
-        {
-          "heading": "Impact",
-          "body": "The event extended beyond the venue through strong media attention and broad online coverage, amplifying the launch and positioning BORK as a premium lifestyle presence in the region. Guests engaged across multiple zones — from product interaction to hospitality moments — creating a warm, shareable atmosphere that supported both brand visibility and emotional connection.",
-          "gallery": [
-            "/project_images/1770066640012-36lhnch4l.mp4",
-            "/project_images/1770066640037-x7wfy2g61.mp4",
-            "/project_images/1770066640071-rzardw02w.mp4",
-            "/project_images/1770066640085-5d2r2dvhd.mp4"
-          ]
-        }
-      ],
-      "tags": [
-        "Boutique launch",
-        "Experiential",
-        "3D",
-        "Technical drawings"
-      ]
+      {
+        heading: "Experience Design",
+        body: "The guest journey included a photowall featuring a mask installation and brand logo illuminated by warm orange lighting, setting an inviting tone. Inside, grazing tables encouraged conversation, complemented by lounge seating for relaxed interaction. A large table with a floral centerpiece added visual drama, while a glass wall with an emblem reinforced brand identity.\n\nA caviar bar elevated the hospitality experience, while a dedicated massage-chair room invited guests to test the product in comfort with music of their choice. Outdoors, the atmosphere shifted into a social, upbeat zone with a DJ, bar, cocktail tables, and space to dance and connect."
+      },
+      {
+        heading: "My Role",
+        body: "As Creative Producer, I translated the event vision into a clear spatial and visual system. I designed the event prints and ensured they fit precisely within the built environment, then produced the 3D renders that secured client alignment and approval. My focus was on cohesion — making sure every branded moment felt integrated, premium, and intentional within the guest flow.",
+        gallery: ["/project_images/1770066639982-uy0rvuj8v.png", "/project_images/1770066640005-arxijsefj.jpeg", "/project_images/1770066640009-38s6nb4me.jpeg"]
+      },
+      {
+        heading: "Execution",
+        body: "For execution, I authored the technical drawings that translated the concept into a buildable plan — especially around graphic placements and fit. The clarity of the documentation enabled the production team to deliver confidently without requiring my on-site supervision, demonstrating a smooth handoff and a well-structured workflow."
+      },
+      {
+        heading: "Impact",
+        body: "The event extended beyond the venue through strong media attention and broad online coverage, amplifying the launch and positioning BORK as a premium lifestyle presence in the region. Guests engaged across multiple zones — from product interaction to hospitality moments — creating a warm, shareable atmosphere that supported both brand visibility and emotional connection.",
+        gallery: ["/project_images/1770066640012-36lhnch4l.mp4", "/project_images/1770066640037-x7wfy2g61.mp4", "/project_images/1770066640071-rzardw02w.mp4", "/project_images/1770066640085-5d2r2dvhd.mp4"]
+      }
+    ],
+    tags: ["Boutique launch", "Experiential", "3D", "Technical drawings"]
+  },
+  {
+    slug: "gosha-levelshoes-floral-workshops",
+    brand: "Gosha x Level Shoes",
+    title: "GOSHA x LEVEL SHOES",
+    subtitle: "A multi-session experiential retail collaboration refined through deep iteration and strict mall standards.",
+    cover: {
+      src: "/project_images/media-6.jpg",
+      alt: "Workshop tables and florals"
     },
-    {
-      "slug": "gosha-levelshoes-floral-workshops",
-      "brand": "Gosha x Level Shoes",
-      "title": "GOSHA x LEVEL SHOES",
-      "subtitle": "A multi-session experiential retail collaboration refined through deep iteration and strict mall standards.",
-      "cover": {
-        "src": "/project_images/media-6.jpg",
-        "alt": "Workshop tables and florals"
+    gallery: ["https://images.unsplash.com/photo-1526045431048-f857369baa09?auto=format&fit=crop&w=1800&q=80", "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=1800&q=80"],
+    customSections: [
+      {
+        heading: "Project Overview",
+        body: "A collaboration between Gosha and Level Shoes designed to bring experiential retail into a luxury environment through hands-on floral workshops. The goal was to create a premium, photogenic space that felt both functional for learning and aspirational for the brand setting."
       },
-      "gallery": [
-        "https://images.unsplash.com/photo-1526045431048-f857369baa09?auto=format&fit=crop&w=1800&q=80",
-        "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=1800&q=80"
-      ],
-      "customSections": [
-        {
-          "heading": "Project Overview",
-          "body": "A collaboration between Gosha and Level Shoes designed to bring experiential retail into a luxury environment through hands-on floral workshops. The goal was to create a premium, photogenic space that felt both functional for learning and aspirational for the brand setting."
-        },
-        {
-          "heading": "An Idea About the Workshop",
-          "body": "The workshops were designed as a guided creative experience — a calm, curated setting where participants could learn floral composition, build their own arrangements, and leave with something personal. The experience blended creativity with luxury retail, offering a memorable reason to stay, engage, and share."
-        },
-        {
-          "heading": "The Design Process & My Role",
-          "body": "The event went through multiple iterations, evolving with each round of feedback, from just a space with a ceiling light to a futuristic, elegant, collaborative hub. The process was guided not only by creative refinement but also by the strict standards and feasibility limitations imposed by The Dubai Mall, ensuring that every idea could realistically be executed. The end goal was to help the client imagine the space and arrive at the perfect design that matched her vision.\n\nAs Creative Producer, I translated her ideas, visions, and aspirations into tangible designs and layouts, developing multiple 3D renders for each iteration to help the client visualize the evolving concept. I carefully crafted the guest journey, spatial flow, and engagement points, while ensuring harmony between Gosha Flowers’ artistry and Level Shoes’ luxury identity. I produced graphic assets and visual elements for the workshops, refining lighting, materials, and workstations to create an immersive and aspirational experience."
-        },
-        {
-          "heading": "Execution",
-          "body": "After finalizing the design direction, I prepared the documentation needed to ensure consistent setup and smooth delivery. The final outcome balanced luxury retail constraints with a functional workshop flow — maintaining elegance while supporting hands-on participation."
-        },
-        {
-          "heading": "Impact",
-          "body": "The collaboration strengthened experiential engagement in-store, creating moments participants wanted to photograph and share. It positioned the activation as both a creative experience and a brand-building touchpoint inside a premium retail environment."
-        }
-      ],
-      "tags": [
-        "Experiential retail",
-        "Workshops",
-        "Iteration",
-        "3D",
-        "Dubai Mall"
-      ]
+      {
+        heading: "An Idea About the Workshop",
+        body: "The workshops were designed as a guided creative experience — a calm, curated setting where participants could learn floral composition, build their own arrangements, and leave with something personal. The experience blended creativity with luxury retail, offering a memorable reason to stay, engage, and share."
+      },
+      {
+        heading: "The Design Process & My Role",
+        body: "The event went through multiple iterations, evolving with each round of feedback, from just a space with a ceiling light to a futuristic, elegant, collaborative hub. The process was guided not only by creative refinement but also by the strict standards and feasibility limitations imposed by The Dubai Mall, ensuring that every idea could realistically be executed. The end goal was to help the client imagine the space and arrive at the perfect design that matched her vision.\n\nAs Creative Producer, I translated her ideas, visions, and aspirations into tangible designs and layouts, developing multiple 3D renders for each iteration to help the client visualize the evolving concept. I carefully crafted the guest journey, spatial flow, and engagement points, while ensuring harmony between Gosha Flowers’ artistry and Level Shoes’ luxury identity. I produced graphic assets and visual elements for the workshops, refining lighting, materials, and workstations to create an immersive and aspirational experience."
+      },
+      {
+        heading: "Execution",
+        body: "After finalizing the design direction, I prepared the documentation needed to ensure consistent setup and smooth delivery. The final outcome balanced luxury retail constraints with a functional workshop flow — maintaining elegance while supporting hands-on participation."
+      },
+      {
+        heading: "Impact",
+        body: "The collaboration strengthened experiential engagement in-store, creating moments participants wanted to photograph and share. It positioned the activation as both a creative experience and a brand-building touchpoint inside a premium retail environment."
+      }
+    ],
+    tags: ["Experiential retail", "Workshops", "Iteration", "3D", "Dubai Mall"]
+  },
+  {
+    slug: "kayali",
+    brand: "KAYALI",
+    title: "KAYALI",
+    subtitle: "Project description",
+    cover: {
+      src: "/project_images/cover-bwmz0ad0a.jpeg",
+      alt: "Project image"
     },
-    {
-      "slug": "kayali",
-      "brand": "KAYALI",
-      "title": "KAYALI",
-      "subtitle": "Project description",
-      "cover": {
-        "src": "/project_images/cover-bwmz0ad0a.jpeg",
-        "alt": "Project image"
+    gallery: [],
+    sections: [
+      {
+        heading: "New Section",
+        body: "",
+        gallery: ["/project_images/1770067051274-lzp8xetb3.jpeg", "/project_images/1770067051288-wifwsfbtp.jpeg", "/project_images/1770067051292-tl3escl2r.jpeg", "/project_images/1770067051295-r21uo07ti.jpeg", "/project_images/1770067051298-ub0ol9vfw.jpeg", "/project_images/1770067051300-tzrqoktwh.jpeg", "/project_images/1770067051302-9tosttf52.jpeg", "/project_images/1770067051304-59cq4nq7d.jpeg", "/project_images/1770067051307-zl12qs5m2.jpeg", "/project_images/1770067051309-grlkrwvzp.jpeg", "/project_images/1770067051311-lpni50o3l.jpeg", "/project_images/1770067051313-rhjus2wj1.jpeg", "/project_images/1770067051317-3zuyasuja.jpeg", "/project_images/1770067051319-uos7li5vc.jpeg", "/project_images/1770067051322-4s9phlpko.jpeg"]
       },
-      "gallery": [],
-      "sections": [
-        {
-          "heading": "New Section",
-          "body": "",
-          "gallery": [
-            "/project_images/1770067051274-lzp8xetb3.jpeg",
-            "/project_images/1770067051288-wifwsfbtp.jpeg",
-            "/project_images/1770067051292-tl3escl2r.jpeg",
-            "/project_images/1770067051295-r21uo07ti.jpeg",
-            "/project_images/1770067051298-ub0ol9vfw.jpeg",
-            "/project_images/1770067051300-tzrqoktwh.jpeg",
-            "/project_images/1770067051302-9tosttf52.jpeg",
-            "/project_images/1770067051304-59cq4nq7d.jpeg",
-            "/project_images/1770067051307-zl12qs5m2.jpeg",
-            "/project_images/1770067051309-grlkrwvzp.jpeg",
-            "/project_images/1770067051311-lpni50o3l.jpeg",
-            "/project_images/1770067051313-rhjus2wj1.jpeg",
-            "/project_images/1770067051317-3zuyasuja.jpeg",
-            "/project_images/1770067051319-uos7li5vc.jpeg",
-            "/project_images/1770067051322-4s9phlpko.jpeg"
-          ]
-        },
-        {
-          "heading": "New Section",
-          "body": "",
-          "gallery": [
-            "/project_images/1770067051324-t6y050h0r.mp4",
-            "/project_images/1770067051330-j74km9vrm.mp4",
-            "/project_images/1770067051334-xh2gm8jjg.mp4",
-            "/project_images/1770067051338-qupcs2pwa.mp4"
-          ]
-        }
-      ],
-      "tags": []
-    },
-    {
-      "slug": "hhh",
-      "brand": "hhhhh",
-      "title": "hhhhhhh",
-      "subtitle": "Project description",
-      "cover": {
-        "src": "",
-        "alt": "Project image"
-      },
-      "gallery": [],
-      "sections": [],
-      "tags": []
-    }
-  ]
+      {
+        heading: "New Section",
+        body: "",
+        gallery: ["/project_images/1770067051324-t6y050h0r.mp4", "/project_images/1770067051330-j74km9vrm.mp4", "/project_images/1770067051334-xh2gm8jjg.mp4", "/project_images/1770067051338-qupcs2pwa.mp4"]
+      }
+    ],
+    tags: []
+  }
+];
+
+export function getProjectBySlug(slug) {
+  return PROJECTS.find((p) => p.slug === slug);
 }
