@@ -5,11 +5,11 @@
       "gh-pages": false
     }
   },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" }
-  ],
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" }
   ],
   "headers": [
     {
