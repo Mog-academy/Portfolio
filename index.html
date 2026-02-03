@@ -4,6 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>Portfolio</title>
+    <script>
+      // GitHub Pages SPA redirect handler
+      (function() {
+        const redirect = new URLSearchParams(window.location.search).get('redirect');
+        if (redirect) {
+          history.replaceState(null, null, '/' + redirect);
+        }
+      })();
+    </script>
     <script type="module" crossorigin src="/assets/index-BvPqkGXA.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-LfcC5xOg.css">
   </head>
