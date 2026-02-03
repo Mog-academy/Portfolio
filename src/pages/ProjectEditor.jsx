@@ -299,7 +299,12 @@ export default function ProjectEditor() {
           const prefix = item.type === 'cover' ? 'cover' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
-          const response = await fetch('http://localhost:3001/upload', {
+          // Use Vercel function in production, localhost in development
+          const uploadUrl = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3001/upload'
+            : '/api/upload';
+
+          const response = await fetch(uploadUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ filename, data: item.url })
@@ -350,6 +355,140 @@ export default function ProjectEditor() {
     }
   };
 
+  const saveOnline = async () => {
+    if (!confirm('This will:\n1. Upload all new images to GitHub\n2. Update projects.js file\n3. Trigger automatic deployment\n\nContinue?')) {
+      return;
+    }
+
+    try {
+      // Step 1: Upload all images first
+      const imagesToUpload = [];
+      
+      projects.forEach((project, pIndex) => {
+        if (project.cover?.src?.startsWith('data:')) {
+          imagesToUpload.push({ 
+            url: project.cover.src, 
+            pIndex, 
+            type: 'cover' 
+          });
+        }
+        
+        project.sections?.forEach((section, sIndex) => {
+          section.gallery?.forEach((url, imgIndex) => {
+            if (url.startsWith('data:')) {
+              imagesToUpload.push({ 
+                url, 
+                pIndex, 
+                sIndex, 
+                imgIndex,
+                type: 'gallery'
+              });
+            }
+          });
+        });
+      });
+
+      let updatedProjects = [...projects];
+
+      if (imagesToUpload.length > 0) {
+        console.log(`📤 Uploading ${imagesToUpload.length} image(s)...`);
+        
+        const uploadUrl = window.location.hostname === 'localhost' 
+          ? 'http://localhost:3001/upload'
+          : '/api/upload';
+
+        for (const item of imagesToUpload) {
+          const timestamp = Date.now();
+          const random = Math.random().toString(36).substr(2, 9);
+          const mimeMatch = item.url.match(/data:([^;]+)/);
+          const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+          const ext = mimeType.split('/')[1] || 'jpg';
+          const prefix = item.type === 'cover' ? 'cover' : timestamp;
+          const filename = `${prefix}-${random}.${ext}`;
+
+          const response = await fetch(uploadUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename, data: item.url })
+          });
+
+          if (response.ok) {
+            const filePath = `/project_images/${filename}`;
+            
+            // Update in the temporary array
+            if (item.type === 'cover') {
+              if (updatedProjects[item.pIndex]?.cover) {
+                updatedProjects[item.pIndex].cover.src = filePath;
+              }
+            } else if (item.type === 'gallery') {
+              if (updatedProjects[item.pIndex]?.sections?.[item.sIndex]?.gallery?.[item.imgIndex]) {
+                updatedProjects[item.pIndex].sections[item.sIndex].gallery[item.imgIndex] = filePath;
+              }
+            }
+            console.log(`✓ Uploaded: ${filename}`);
+          } else {
+            throw new Error(`Failed to upload ${filename}`);
+          }
+        }
+
+        // Update state with uploaded image paths
+        setProjects(updatedProjects);
+      }
+
+      // Step 2: Generate and upload projects.js file
+      console.log('📝 Updating projects.js...');
+      
+      const formatValue = (value, indent = 0) => {
+        if (value === null || value === undefined) return 'null';
+        if (typeof value === 'string') return `"${value.replace(/"/g, '\\"')}"`;
+        if (typeof value === 'boolean' || typeof value === 'number') return String(value);
+        if (Array.isArray(value)) {
+          if (value.length === 0) return '[]';
+          const items = value.map(v => formatValue(v, indent + 1)).join(', ');
+          return `[${items}]`;
+        }
+        if (typeof value === 'object') {
+          const spaces = '  '.repeat(indent);
+          const entries = Object.entries(value)
+            .map(([k, v]) => `${spaces}  ${k}: ${formatValue(v, indent + 1)}`)
+            .join(',\n');
+          return `{\n${entries}\n${spaces}}`;
+        }
+        return String(value);
+      };
+
+      const siteCode = `export const SITE = ${formatValue(siteInfo, 0)};\n\n`;
+      const projectsCode = `export const PROJECTS = [\n${updatedProjects.map(p => `  ${formatValue(p, 1)}`).join(',\n')}\n];\n\n`;
+      const getterCode = `export function getProjectBySlug(slug) {\n  return PROJECTS.find((p) => p.slug === slug);\n}\n`;
+      
+      const fileContent = `// Edit this file to add / update projects.\n// Auto-generated by Portfolio Editor\n\n${siteCode}${projectsCode}${getterCode}`;
+
+      const updateUrl = window.location.hostname === 'localhost'
+        ? 'http://localhost:3001/update-projects'
+        : '/api/update-projects';
+
+      const updateResponse = await fetch(updateUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileContent })
+      });
+
+      if (!updateResponse.ok) {
+        const error = await updateResponse.json();
+        throw new Error(error.message || 'Failed to update projects file');
+      }
+
+      const result = await updateResponse.json();
+      
+      alert(`✓ Success!\n\n${imagesToUpload.length} image(s) uploaded\nProjects file updated\n\nYour site will rebuild automatically in 1-2 minutes.`);
+      console.log('✓ Save complete:', result);
+
+    } catch (error) {
+      console.error('Save online error:', error);
+      alert(`❌ Error: ${error.message}\n\nMake sure you're accessing the site through Vercel URL.`);
+    }
+  };
+
   const currentProject = projects[selectedProject];
 
   return (
@@ -373,8 +512,11 @@ export default function ProjectEditor() {
           <button onClick={copyToClipboard} className="btn-editor btn-secondary">
             Copy Code
           </button>
-          <button onClick={exportData} className="btn-editor btn-primary">
+          <button onClick={exportData} className="btn-editor btn-secondary">
             Save as projects.js
+          </button>
+          <button onClick={saveOnline} className="btn-editor btn-primary" style={{ marginLeft: '10px' }}>
+            💾 Save Online
           </button>
         </div>
       </div>
