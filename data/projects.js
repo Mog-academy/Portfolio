@@ -231,8 +231,8 @@ As Creative Producer, I translated her ideas, visions, and aspirations into tang
     tags: []
   },
   {
-    slug: "new-project-1770149318129",
-    brand: "New Brandss",
+    slug: "new-project-1770149744747",
+    brand: "New Brandsssasdfw",
     title: "New Project Title",
     subtitle: "Project description",
     cover: {
