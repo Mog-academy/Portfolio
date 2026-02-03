@@ -231,12 +231,12 @@ As Creative Producer, I translated her ideas, visions, and aspirations into tang
     tags: []
   },
   {
-    slug: "patrickta",
-    brand: "PATRICK TA",
-    title: "PATRICK TA",
+    slug: "pta",
+    brand: "New Brand",
+    title: "New Project Title",
     subtitle: "Project description",
     cover: {
-      src: "/project_images/cover-12g6q2fw7.jpeg",
+      src: "/project_images/cover-2n3niyx1s.jpeg",
       alt: "Project image"
     },
     gallery: [],
