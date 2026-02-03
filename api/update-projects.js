@@ -1,5 +1,5 @@
 // Vercel Serverless Function for updating projects.json in Blob Storage
-import { put } from '@vercel/blob';
+import { put, del, list } from '@vercel/blob';
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -34,6 +34,20 @@ export default async function handler(req, res) {
     
     if (!fileContent) {
       return res.status(400).json({ error: 'Missing fileContent' });
+    }
+
+    // Delete existing projects.json if it exists
+    try {
+      const { blobs } = await list({ prefix: 'projects.json' });
+      for (const blob of blobs) {
+        if (blob.pathname === 'projects.json') {
+          await del(blob.url);
+          console.log('✓ Deleted old projects.json');
+          break;
+        }
+      }
+    } catch (delError) {
+      console.log('No existing projects.json to delete');
     }
 
     // Upload to Vercel Blob
