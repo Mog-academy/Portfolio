@@ -40,7 +40,7 @@ export default async function handler(req, res) {
     const blob = await put('projects.json', fileContent, {
       access: 'public',
       contentType: 'application/json',
-      addRandomSuffix: true,
+      addRandomSuffix: false,
     });
     
     console.log(`✓ Updated projects.json in Blob Storage: ${blob.url}`);
