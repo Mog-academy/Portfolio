@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     }
 
     // Update projects.js file on gh-pages branch
-    const path = 'data/projects.js';
+    const path = 'data/projects.json';
     const githubUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
     
     // Get current file SHA
