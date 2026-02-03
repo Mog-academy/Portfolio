@@ -18,7 +18,7 @@ export const SITE = {
 export const PROJECTS = [
   {
     slug: "kosas-sephora-middle-east-launch",
-    brand: "KOSASsss",
+    brand: "KOSAS",
     title: "KOSAS",
     subtitle: "A multi-venue launch experience that brought Kosas to the Middle East with bold, Instagrammable moments.",
     cover: {
@@ -228,6 +228,19 @@ As Creative Producer, I translated her ideas, visions, and aspirations into tang
         body: "",
         gallery: ["/project_images/1770067051324-t6y050h0r.mp4", "/project_images/1770067051330-j74km9vrm.mp4", "/project_images/1770067051334-xh2gm8jjg.mp4", "/project_images/1770067051338-qupcs2pwa.mp4"]
       }],
+    tags: []
+  },
+  {
+    slug: "patrickta",
+    brand: "PATRICK TA",
+    title: "PATRICK TA",
+    subtitle: "Project description",
+    cover: {
+      src: "/project_images/cover-12g6q2fw7.jpeg",
+      alt: "Project image"
+    },
+    gallery: [],
+    sections: [],
     tags: []
   }
 ];
