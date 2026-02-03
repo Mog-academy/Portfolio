@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const allowedOrigins = [
     'https://m-elgaili.com',
     'https://www.m-elgaili.com',
-    'https://portfolio-pi-liard-95.vercel.app',
+    'https://portfolio-bice-kappa-24.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000'
   ];
