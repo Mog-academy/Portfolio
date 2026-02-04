@@ -256,6 +256,12 @@ body{margin:0;font-family:Helvetica,Arial,sans-serif;color:var(--text);backgroun
 .card:hover .card-overlay,
 .card:hover .card-overlay-center{opacity:1}
 
+/* Show overlay on mobile when card is visible (scrolled into view) */
+@media (max-width:900px){
+  .card.mobile-visible .card-overlay,
+  .card.mobile-visible .card-overlay-center{opacity:1}
+}
+
 /* Overlays are controlled by .card hover; no per-tile hiding of child elements */
 
 
