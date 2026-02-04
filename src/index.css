@@ -82,7 +82,7 @@ body{margin:0;font-family:Helvetica,Arial,sans-serif;color:var(--text);backgroun
 
 /* PROJECT SECTION WITH SIDE-BY-SIDE LAYOUT */
 .project-section-wrapper{margin-bottom:40px}
-.section-split-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.section-split-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
 .section-text-column{flex:1;min-width:0}
 .section-gallery-column{flex:1;min-width:0}
 
@@ -111,6 +111,10 @@ body{margin:0;font-family:Helvetica,Arial,sans-serif;color:var(--text);backgroun
 /* Five+ images - horizontal wrapping grid (fills width, multiple rows) */
 .section-gallery-container.section-gallery-horizontal{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;width:100%}
 .section-gallery-container.section-gallery-horizontal .section-gallery-item{width:100%;aspect-ratio:1/1}
+
+/* Last item spans 2 columns when odd count, adjusts aspect ratio to maintain height */
+.section-gallery-container.section-gallery-horizontal .section-gallery-item:last-child:nth-child(odd){grid-column:span 2;aspect-ratio:2/1}
+.section-gallery-container.section-gallery-grid .section-gallery-item:last-child:nth-child(odd){grid-column:span 2;aspect-ratio:2/1}
 
 /* Gallery item styling */
 .section-gallery-item{overflow:hidden;border-radius:8px;background:var(--panel);position:relative;aspect-ratio:1/1}

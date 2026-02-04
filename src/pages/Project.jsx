@@ -140,11 +140,12 @@ export default function Project() {
           
           return (
             <div key={s.heading} className="project-section-wrapper">
-              <Section title={s.heading}>
+              <section className="section">
                 {useFullWidth ? (
                   // Full-width layout for no images or 5+ images
                   <div className="section-full-layout">
                     <div className="section-text-full">
+                      <h2 className="section-title">{s.heading}</h2>
                       <Paragraphs text={s.body} />
                     </div>
                     {hasGallery && (
@@ -161,6 +162,7 @@ export default function Project() {
                   // Side-by-side layout for 1-4 images
                   <div className="section-split-layout">
                     <div className="section-text-column">
+                      <h2 className="section-title">{s.heading}</h2>
                       <Paragraphs text={s.body} />
                     </div>
                     
@@ -173,7 +175,7 @@ export default function Project() {
                     </div>
                   </div>
                 )}
-              </Section>
+              </section>
             </div>
           );
         })}
