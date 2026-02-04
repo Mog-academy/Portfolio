@@ -706,6 +706,34 @@ export default function ProjectEditor() {
                   </div>
 
                   <div className="form-group">
+                    <label>Hover Video (shows on hover/mobile center)</label>
+                    <select
+                      value={currentProject.hoverVideo || ''}
+                      onChange={(e) => updateProject(selectedProject, "hoverVideo", e.target.value)}
+                    >
+                      <option value="">-- No video (use first from gallery) --</option>
+                      {currentProject.sections?.flatMap(section => 
+                        section.gallery?.filter(url => /\.(mp4|webm|ogg|mov)$/i.test(url)) || []
+                      ).map((video, idx) => (
+                        <option key={idx} value={video}>
+                          {video.split('/').pop().substring(0, 50)}
+                        </option>
+                      ))}
+                    </select>
+                    {currentProject.hoverVideo && (
+                      <div className="video-preview" style={{ marginTop: '10px' }}>
+                        <video 
+                          src={currentProject.hoverVideo} 
+                          muted 
+                          loop 
+                          autoPlay 
+                          style={{ width: '100%', maxWidth: '300px', borderRadius: '4px' }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="form-group">
                     <label>Tags (comma-separated)</label>
                     <input
                       type="text"
