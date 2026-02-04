@@ -1,41 +1,45 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-export default function ProjectCard({ project }) {
+export default function ProjectCard({ project, index, isCentered, onCenterChange }) {
   const cardRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Show title when card is at least 50% visible
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      },
-      {
-        threshold: [0.5], // Trigger when 50% visible
-      }
-    );
+    const checkIfCentered = () => {
+      if (!cardRef.current) return;
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
+      const rect = cardRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const cardCenter = rect.top + rect.height / 2;
+      const screenCenter = windowHeight / 2;
+      
+      // Check if card center is close to screen center (within 20% of screen height)
+      const threshold = windowHeight * 0.2;
+      const distanceFromCenter = Math.abs(cardCenter - screenCenter);
+      
+      if (distanceFromCenter < threshold && rect.top < windowHeight && rect.bottom > 0) {
+        onCenterChange(index);
       }
     };
-  }, []);
+
+    // Only add scroll listener on mobile
+    if (window.innerWidth <= 900) {
+      checkIfCentered();
+      window.addEventListener('scroll', checkIfCentered);
+      window.addEventListener('resize', checkIfCentered);
+
+      return () => {
+        window.removeEventListener('scroll', checkIfCentered);
+        window.removeEventListener('resize', checkIfCentered);
+      };
+    }
+  }, [index, onCenterChange]);
 
   return (
     <Link 
       ref={cardRef}
       to={`/project/${project.slug}`} 
-      className={`card ${isVisible ? 'mobile-visible' : ''}`}
+      className={`card ${isCentered ? 'mobile-visible' : ''}`}
       aria-label={`${project.brand} project`}
     >
       <div className="card-media">
