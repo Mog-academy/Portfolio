@@ -3,21 +3,25 @@ import { put, del, list } from '@vercel/blob';
 
 export default async function handler(req, res) {
   // Enable CORS
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    'https://m-elgaili.com',
-    'https://www.m-elgaili.com',
-    'https://portfolio-bice-kappa-24.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
-  ];
-  
-  if (allowedOrigins.includes(origin)) {
+  const origin = req.headers.origin || '';
+  const allowed =
+    [
+      'https://m-elgaili.com',
+      'https://www.m-elgaili.com',
+      'https://portfolio-bice-kappa-24.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:3000',
+    ].includes(origin) ||
+    /\.vercel\.app$/i.test(origin);
+
+  if (allowed) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, X-Editor-Auth');
 
   // Handle preflight
   if (req.method === 'OPTIONS') {

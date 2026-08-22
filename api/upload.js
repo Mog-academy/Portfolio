@@ -1,28 +1,37 @@
-// Vercel Serverless Function for uploading images to Blob Storage
-import { put } from '@vercel/blob';
+// Vercel Serverless Function: client upload token exchange for Vercel Blob
+// Files upload directly from the browser (bypasses the 4.5MB function body limit)
+import { handleUpload } from '@vercel/blob/client';
 
-export default async function handler(req, res) {
-  // Enable CORS
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    'https://m-elgaili.com',
-    'https://www.m-elgaili.com',
-    'https://portfolio-bice-kappa-24.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
-  ];
-  
-  if (allowedOrigins.includes(origin)) {
+function setCors(req, res) {
+  const origin = req.headers.origin || '';
+  const allowed =
+    [
+      'https://m-elgaili.com',
+      'https://www.m-elgaili.com',
+      'https://portfolio-bice-kappa-24.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:3000',
+    ].includes(origin) ||
+    /\.vercel\.app$/i.test(origin);
+
+  if (allowed) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, X-Editor-Auth'
+  );
+}
 
-  // Handle preflight
+export default async function handler(req, res) {
+  setCors(req, res);
+
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
@@ -30,35 +39,41 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { filename, data } = req.body;
-    
-    if (!filename || !data) {
-      return res.status(400).json({ error: 'Missing filename or data' });
-    }
-
-    // Convert base64 to buffer
-    const base64Data = data.split(',')[1];
-    const buffer = Buffer.from(base64Data, 'base64');
-    
-    // Upload to Vercel Blob
-    const blob = await put(`project_images/${filename}`, buffer, {
-      access: 'public',
-      addRandomSuffix: false,
+    const jsonResponse = await handleUpload({
+      body: req.body,
+      request: req,
+      onBeforeGenerateToken: async () => {
+        // Editor is already password-gated in the SPA.
+        // Restrict what can be uploaded to media types used by the portfolio.
+        return {
+          allowedContentTypes: [
+            'image/jpeg',
+            'image/jpg',
+            'image/png',
+            'image/webp',
+            'image/gif',
+            'image/svg+xml',
+            'video/mp4',
+            'video/webm',
+            'video/quicktime',
+            'video/x-m4v',
+          ],
+          maximumSizeInBytes: 200 * 1024 * 1024,
+          addRandomSuffix: false,
+          allowOverwrite: true,
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        console.log(`✓ Client upload completed: ${blob.url}`);
+      },
     });
-    
-    console.log(`✓ Uploaded: ${filename} to Blob Storage`);
-    
-    res.status(200).json({ 
-      success: true, 
-      path: blob.url,
-      message: 'File uploaded successfully to Blob Storage'
-    });
 
+    return res.status(200).json(jsonResponse);
   } catch (error) {
     console.error('Upload error:', error);
-    res.status(500).json({ 
+    return res.status(400).json({
       error: error.message,
-      details: 'Failed to upload file to Blob Storage'
+      details: 'Failed to handle client upload',
     });
   }
 }

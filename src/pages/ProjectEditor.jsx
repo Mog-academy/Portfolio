@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useProjects } from "../context/ProjectsContext.jsx";
 import { DEFAULT_GATE } from "./Gate.jsx";
+import { getApiBase, uploadDataUrl } from "../utils/blobUpload.js";
 
 export default function ProjectEditor() {
   const { data, loading, refresh } = useProjects();
@@ -336,40 +337,20 @@ export default function ProjectEditor() {
       let failedCount = 0;
       const uploadedPaths = [];
 
-      // Upload each data URL to the server
       for (const item of imagesToUpload) {
         try {
-          // Generate unique filename
           const timestamp = Date.now();
           const random = Math.random().toString(36).substr(2, 9);
           const mimeMatch = item.url.match(/data:([^;]+)/);
           const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-          const ext = mimeType.split('/')[1] || 'jpg';
+          const ext = mimeType.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
           const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
-          // Use Vercel function in production, localhost in development
-          const apiBase = import.meta.env.VITE_API_URL || '';
-          const uploadUrl = window.location.hostname === 'localhost' 
-            ? 'http://localhost:3001/upload'
-            : `${apiBase}/api/upload`;
-
-          const response = await fetch(uploadUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename, data: item.url })
-          });
-
-          if (response.ok) {
-            const result = await response.json();
-            const filePath = result.path; // Use the blob URL from response
-            uploadedPaths.push({ ...item, filePath });
-            savedCount++;
-            console.log(`✓ Saved: ${filename}`);
-          } else {
-            failedCount++;
-            console.error(`❌ Failed to save image`);
-          }
+          const filePath = await uploadDataUrl(item.url, filename);
+          uploadedPaths.push({ ...item, filePath });
+          savedCount++;
+          console.log(`✓ Saved: ${filename}`);
         } catch (err) {
           failedCount++;
           console.error(`❌ Error saving image:`, err);
@@ -408,12 +389,12 @@ export default function ProjectEditor() {
       }
 
       if (failedCount > 0) {
-        alert(`Saved ${savedCount} images, but ${failedCount} failed.\n\nMake sure the upload server is running:\nnpm run upload-server`);
+        alert(`Saved ${savedCount} images, but ${failedCount} failed.\n\n${failedCount > 0 ? 'Large videos need a working Vercel Blob upload. Check the console for details.' : ''}`);
       } else {
-        alert(`✓ Successfully saved ${savedCount} image(s) to public/project_images/\n\n⚠️ IMPORTANT: Restart your dev server (npm run dev) to see the new images.`);
+        alert(`✓ Successfully saved ${savedCount} image(s).\n\nClick "Save Online" to publish project data.`);
       }
     } catch (error) {
-      alert('Error: Upload server not running.\n\nStart it with: npm run upload-server');
+      alert(`Error uploading: ${error.message}`);
       console.error('Upload error:', error);
     }
   };
@@ -468,32 +449,19 @@ export default function ProjectEditor() {
 
       if (imagesToUpload.length > 0) {
         console.log(`📤 Uploading ${imagesToUpload.length} image(s)...`);
-        
-        const apiBase = import.meta.env.VITE_API_URL || '';
-        const uploadUrl = window.location.hostname === 'localhost' 
-          ? 'http://localhost:3001/upload'
-          : `${apiBase}/api/upload`;
 
         for (const item of imagesToUpload) {
           const timestamp = Date.now();
           const random = Math.random().toString(36).substr(2, 9);
           const mimeMatch = item.url.match(/data:([^;]+)/);
           const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-          const ext = mimeType.split('/')[1] || 'jpg';
+          const ext = mimeType.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
           const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
-          const response = await fetch(uploadUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename, data: item.url })
-          });
+          try {
+            const filePath = await uploadDataUrl(item.url, filename);
 
-          if (response.ok) {
-            const result = await response.json();
-            const filePath = result.path || `/project_images/${filename}`;
-            
-            // Update in the temporary array
             if (item.type === 'cover') {
               if (updatedProjects[item.pIndex]?.cover) {
                 updatedProjects[item.pIndex].cover.src = filePath;
@@ -508,8 +476,9 @@ export default function ProjectEditor() {
               updatedSiteInfo.gate[item.gIndex].video = filePath;
             }
             console.log(`✓ Uploaded: ${filename}`);
-          } else {
-            throw new Error(`Failed to upload ${filename}`);
+          } catch (uploadErr) {
+            console.error(uploadErr);
+            throw new Error(`Failed to upload ${filename}: ${uploadErr.message}`);
           }
         }
 
@@ -547,10 +516,7 @@ export default function ProjectEditor() {
       };
       const fileContent = JSON.stringify(data, null, 2);
 
-      const apiBase = import.meta.env.VITE_API_URL || '';
-      const updateUrl = window.location.hostname === 'localhost'
-        ? 'http://localhost:3001/update-projects'
-        : `${apiBase}/api/update-projects`;
+      const updateUrl = `${getApiBase()}/api/update-projects`;
 
       const updateResponse = await fetch(updateUrl, {
         method: 'POST',
@@ -559,13 +525,13 @@ export default function ProjectEditor() {
       });
 
       if (!updateResponse.ok) {
-        const error = await updateResponse.json();
-        throw new Error(error.message || 'Failed to update projects file');
+        const error = await updateResponse.json().catch(() => ({}));
+        throw new Error(error.message || error.error || 'Failed to update projects file');
       }
 
       const result = await updateResponse.json();
       
-      alert(`✓ Success!\n\n${imagesToUpload.length} image(s) uploaded\nProjects file updated\n\nRefreshing data...`);
+      alert(`✓ Success!\n\n${imagesToUpload.length} media file(s) uploaded\nProjects file updated\n\nRefreshing data...`);
       console.log('✓ Save complete:', result);
       
       // Refresh the data from the server
@@ -573,7 +539,7 @@ export default function ProjectEditor() {
 
     } catch (error) {
       console.error('Save online error:', error);
-      alert(`❌ Error: ${error.message}\n\nMake sure you're accessing the site through Vercel URL.`);
+      alert(`❌ Error: ${error.message}\n\nLarge videos upload directly to Vercel Blob now. If this keeps failing, confirm Blob storage is connected on the Vercel project.`);
     }
   };
 
