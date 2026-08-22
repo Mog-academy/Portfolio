@@ -7,12 +7,12 @@ export default function Navbar() {
 
   if (loading || !data) return null;
 
-  const { SITE } = data;
   return (
     <div className="sidebar-inner">
       <nav className="sidebar-nav" aria-label="Primary">
-        <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>Event Design</NavLink>
-        <a href="https://mjeeli.artstation.com" target="_blank" rel="noreferrer">Motion Design</a>
+        <Link to="/">Home</Link>
+        <NavLink to="/events" className={({ isActive }) => (isActive ? "active" : "")}>Event Design</NavLink>
+        <NavLink to="/motion" className={({ isActive }) => (isActive ? "active" : "")}>Motion Design</NavLink>
         <NavLink to="/philosophy" className={({ isActive }) => (isActive ? "active" : "")}>Philosophy</NavLink>
         <a href="https://www.mog-academy.com" target="_blank" rel="noreferrer">Academy</a>
       </nav>

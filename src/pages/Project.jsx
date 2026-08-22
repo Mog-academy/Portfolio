@@ -85,7 +85,7 @@ export default function Project() {
       <div className="container">
         <div className="project-top">
           <h1 className="project-title">Project not found</h1>
-          <Link className="back" to="/">Back to work</Link>
+          <Link className="back" to="/events">Back to work</Link>
         </div>
       </div>
     );
@@ -119,7 +119,7 @@ export default function Project() {
       )}
 
       <div className="project-top">
-        <Link className="back-btn" to="/">← Back to Projects</Link>
+        <Link className="back-btn" to="/events">← Back to Projects</Link>
       </div>
 
       <header className="project-hero">

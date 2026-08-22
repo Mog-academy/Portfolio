@@ -6,18 +6,16 @@ export default function Footer() {
   const { data, loading } = useProjects();
   const year = new Date().getFullYear();
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const isEventsPage = location.pathname === "/events";
 
   if (loading || !data) return null;
-
-  const { SITE } = data;
 
   return (
     <footer className="footer site-footer">
       <div className="container">
-        {!isHomePage && (
+        {!isEventsPage && (
           <div className="footer-back">
-            <Link to="/" className="back-to-projects-btn">← Back to Projects</Link>
+            <Link to="/events" className="back-to-projects-btn">← Back to Projects</Link>
           </div>
         )}
         <div className="footer-bottom">

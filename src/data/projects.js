@@ -12,7 +12,45 @@ export const SITE = {
     instagram: "https://www.instagram.com/mo.egaili/",
     linkedin: "https://www.linkedin.com/in/mohamed-elgaili-ali/",
     whatsapp: "+971509320937"
-  }
+  },
+  gate: [
+    {
+      id: "motion",
+      label: "Motion Design",
+      to: "/motion",
+      external: false,
+      image: "/project_images/media-3.jpg",
+      video: "/project_images/media-30.mp4",
+      logo: false
+    },
+    {
+      id: "events",
+      label: "Event Design",
+      to: "/events",
+      external: false,
+      image: "/project_images/media-1.jpg",
+      video: "/project_images/media-57.mp4",
+      logo: false
+    },
+    {
+      id: "archviz",
+      label: "Architectural Visualization",
+      to: "https://mog-renders.com",
+      external: true,
+      image: "/gate/mog-renders-logo.png",
+      video: "/project_images/1770066502689-1nsc3an6l.mp4",
+      logo: true
+    },
+    {
+      id: "academy",
+      label: "My Academy",
+      to: "https://www.mog-academy.com",
+      external: true,
+      image: "/gate/mog-academy-logo.png",
+      video: "/project_images/1770066640012-36lhnch4l.mp4",
+      logo: true
+    }
+  ]
 };
 
 export const PROJECTS = [

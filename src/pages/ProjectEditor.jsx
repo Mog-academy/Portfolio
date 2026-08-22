@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useProjects } from "../context/ProjectsContext.jsx";
+import { DEFAULT_GATE } from "./Gate.jsx";
 
 export default function ProjectEditor() {
   const { data, loading, refresh } = useProjects();
@@ -11,7 +12,10 @@ export default function ProjectEditor() {
   useEffect(() => {
     if (data) {
       setProjects(data.PROJECTS);
-      setSiteInfo(data.SITE);
+      setSiteInfo({
+        ...data.SITE,
+        gate: data.SITE?.gate?.length ? data.SITE.gate : DEFAULT_GATE.map((d) => ({ ...d })),
+      });
     }
   }, [data]);
 
@@ -21,6 +25,25 @@ export default function ProjectEditor() {
 
   const updateSiteInfo = (field, value) => {
     setSiteInfo({ ...siteInfo, [field]: value });
+  };
+
+  const updateGateItem = (index, field, value) => {
+    const gate = [...(siteInfo.gate || [])];
+    gate[index] = { ...gate[index], [field]: value };
+    setSiteInfo({ ...siteInfo, gate });
+  };
+
+  const updateGateFile = (index, field, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setSiteInfo((prev) => {
+        const gate = [...(prev.gate || [])];
+        gate[index] = { ...gate[index], [field]: e.target.result };
+        return { ...prev, gate };
+      });
+    };
+    reader.readAsDataURL(file);
   };
 
   const updateProject = (index, field, value) => {
@@ -212,7 +235,12 @@ export default function ProjectEditor() {
       reader.onload = (e) => {
         try {
           const data = JSON.parse(e.target.result);
-          if (data.SITE) setSiteInfo(data.SITE);
+          if (data.SITE) {
+            setSiteInfo({
+              ...data.SITE,
+              gate: data.SITE.gate?.length ? data.SITE.gate : DEFAULT_GATE.map((d) => ({ ...d })),
+            });
+          }
           if (data.PROJECTS) setProjects(data.PROJECTS);
           alert("Data imported successfully!");
         } catch (error) {
@@ -287,6 +315,15 @@ export default function ProjectEditor() {
       });
     });
 
+    siteInfo.gate?.forEach((dest, gIndex) => {
+      if (dest.image?.startsWith('data:')) {
+        imagesToUpload.push({ url: dest.image, gIndex, type: 'gate-image' });
+      }
+      if (dest.video?.startsWith('data:')) {
+        imagesToUpload.push({ url: dest.video, gIndex, type: 'gate-video' });
+      }
+    });
+
     if (imagesToUpload.length === 0) {
       alert('No new images to save. All images are already uploaded!');
       return;
@@ -308,7 +345,7 @@ export default function ProjectEditor() {
           const mimeMatch = item.url.match(/data:([^;]+)/);
           const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
           const ext = mimeType.split('/')[1] || 'jpg';
-          const prefix = item.type === 'cover' ? 'cover' : timestamp;
+          const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
           // Use Vercel function in production, localhost in development
@@ -356,6 +393,18 @@ export default function ProjectEditor() {
           });
           return updated;
         });
+
+        setSiteInfo((prev) => {
+          const gate = [...(prev.gate || [])];
+          uploadedPaths.forEach((item) => {
+            if (item.type === 'gate-image' && gate[item.gIndex]) {
+              gate[item.gIndex] = { ...gate[item.gIndex], image: item.filePath };
+            } else if (item.type === 'gate-video' && gate[item.gIndex]) {
+              gate[item.gIndex] = { ...gate[item.gIndex], video: item.filePath };
+            }
+          });
+          return { ...prev, gate };
+        });
       }
 
       if (failedCount > 0) {
@@ -402,7 +451,20 @@ export default function ProjectEditor() {
         });
       });
 
+      siteInfo.gate?.forEach((dest, gIndex) => {
+        if (dest.image?.startsWith('data:')) {
+          imagesToUpload.push({ url: dest.image, gIndex, type: 'gate-image' });
+        }
+        if (dest.video?.startsWith('data:')) {
+          imagesToUpload.push({ url: dest.video, gIndex, type: 'gate-video' });
+        }
+      });
+
       let updatedProjects = [...projects];
+      let updatedSiteInfo = {
+        ...siteInfo,
+        gate: (siteInfo.gate || []).map((d) => ({ ...d })),
+      };
 
       if (imagesToUpload.length > 0) {
         console.log(`📤 Uploading ${imagesToUpload.length} image(s)...`);
@@ -418,7 +480,7 @@ export default function ProjectEditor() {
           const mimeMatch = item.url.match(/data:([^;]+)/);
           const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
           const ext = mimeType.split('/')[1] || 'jpg';
-          const prefix = item.type === 'cover' ? 'cover' : timestamp;
+          const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
           const response = await fetch(uploadUrl, {
@@ -428,7 +490,8 @@ export default function ProjectEditor() {
           });
 
           if (response.ok) {
-            const filePath = `/project_images/${filename}`;
+            const result = await response.json();
+            const filePath = result.path || `/project_images/${filename}`;
             
             // Update in the temporary array
             if (item.type === 'cover') {
@@ -439,6 +502,10 @@ export default function ProjectEditor() {
               if (updatedProjects[item.pIndex]?.sections?.[item.sIndex]?.gallery?.[item.imgIndex]) {
                 updatedProjects[item.pIndex].sections[item.sIndex].gallery[item.imgIndex] = filePath;
               }
+            } else if (item.type === 'gate-image' && updatedSiteInfo.gate[item.gIndex]) {
+              updatedSiteInfo.gate[item.gIndex].image = filePath;
+            } else if (item.type === 'gate-video' && updatedSiteInfo.gate[item.gIndex]) {
+              updatedSiteInfo.gate[item.gIndex].video = filePath;
             }
             console.log(`✓ Uploaded: ${filename}`);
           } else {
@@ -448,6 +515,7 @@ export default function ProjectEditor() {
 
         // Update state with uploaded image paths
         setProjects(updatedProjects);
+        setSiteInfo(updatedSiteInfo);
       }
 
       // Step 2: Generate and upload projects.js file
@@ -474,7 +542,7 @@ export default function ProjectEditor() {
 
       // Create JSON data
       const data = {
-        SITE: siteInfo,
+        SITE: updatedSiteInfo,
         PROJECTS: updatedProjects
       };
       const fileContent = JSON.stringify(data, null, 2);
@@ -554,6 +622,12 @@ export default function ProjectEditor() {
             >
               Site Information
             </button>
+            <button
+              className={selectedProject === 'gate' ? 'sidebar-item active' : 'sidebar-item'}
+              onClick={() => setSelectedProject('gate')}
+            >
+              Home Gate
+            </button>
           </div>
 
           <div className="sidebar-section">
@@ -621,6 +695,65 @@ export default function ProjectEditor() {
                   />
                 </div>
               </div>
+            </section>
+          ) : selectedProject === 'gate' ? (
+            <section className="editor-section">
+              <h2>Home Gate</h2>
+              <p style={{ color: 'var(--muted)', marginTop: 0, marginBottom: 24 }}>
+                Choose the image and hover video for each destination tile on the home page.
+              </p>
+              {(siteInfo.gate || []).map((dest, index) => (
+                <div key={dest.id || index} className="section-card">
+                  <div className="section-card-header">
+                    <h4>{dest.label}</h4>
+                  </div>
+                  <div className="editor-form">
+                    <div className="form-group">
+                      <label>Tile Image</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => updateGateFile(index, "image", e.target.files[0])}
+                      />
+                      {dest.image && (
+                        <div className="image-preview" style={{ marginTop: 10 }}>
+                          <img src={dest.image} alt={`${dest.label} preview`} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group">
+                      <label>Hover Video</label>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        onChange={(e) => updateGateFile(index, "video", e.target.files[0])}
+                      />
+                      {dest.video && (
+                        <div className="video-preview" style={{ marginTop: 10 }}>
+                          <video
+                            src={dest.video}
+                            muted
+                            loop
+                            controls
+                            style={{ width: '100%', maxWidth: 300, borderRadius: 4 }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={!!dest.logo}
+                          onChange={(e) => updateGateItem(index, "logo", e.target.checked)}
+                          style={{ marginRight: 8 }}
+                        />
+                        Treat image as logo (contain, white background)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </section>
           ) : (
             <>
