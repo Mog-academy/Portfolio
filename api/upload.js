@@ -85,7 +85,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = req.body || {};
+    let body = req.body;
+    if (typeof body === 'string') {
+      body = body ? JSON.parse(body) : {};
+    }
+    if (!body || typeof body !== 'object') {
+      body = {};
+    }
     const type = body.type;
 
     if (type === 'blob.generate-client-token') {
