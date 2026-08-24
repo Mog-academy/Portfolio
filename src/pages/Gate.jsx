@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProjects } from "../context/ProjectsContext.jsx";
 
@@ -41,27 +41,112 @@ export const DEFAULT_GATE = [
   },
 ];
 
-function DestinationLink({ label, to, external, image, video, logo }) {
+function sampleGlowColor(img) {
+  try {
+    const size = 24;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return "180, 180, 180";
+    ctx.drawImage(img, 0, 0, size, size);
+    const { data } = ctx.getImageData(0, 0, size, size);
+
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let n = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] < 140) continue;
+      const pr = data[i];
+      const pg = data[i + 1];
+      const pb = data[i + 2];
+      // Skip near-white / near-black so logos still yield a useful hue
+      if (pr > 248 && pg > 248 && pb > 248) continue;
+      if (pr < 12 && pg < 12 && pb < 12) continue;
+      r += pr;
+      g += pg;
+      b += pb;
+      n += 1;
+    }
+    if (!n) return "180, 180, 180";
+
+    r /= n;
+    g /= n;
+    b /= n;
+
+    // Mild saturation boost so the glow reads clearly on dark UI
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const mid = (max + min) / 2;
+    if (max > min) {
+      const amount = 0.35;
+      r = mid + (r - mid) * (1 + amount);
+      g = mid + (g - mid) * (1 + amount);
+      b = mid + (b - mid) * (1 + amount);
+    }
+
+    return `${Math.round(Math.min(255, Math.max(0, r)))}, ${Math.round(Math.min(255, Math.max(0, g)))}, ${Math.round(Math.min(255, Math.max(0, b)))}`;
+  } catch {
+    return "180, 180, 180";
+  }
+}
+
+function DestinationLink({
+  id,
+  label,
+  to,
+  external,
+  image,
+  video,
+  logo,
+  active,
+  index = 0,
+  onActivate,
+  onDeactivate,
+}) {
   const videoRef = useRef(null);
+  const imageRef = useRef(null);
+  const [glow, setGlow] = useState("180, 180, 180");
 
-  const playVideo = () => {
+  useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
-    el.currentTime = 0;
-    el.play().catch(() => {});
-  };
+    if (active) {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+      el.currentTime = 0;
+    }
+  }, [active]);
 
-  const pauseVideo = () => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.pause();
-    el.currentTime = 0;
-  };
+  useEffect(() => {
+    setGlow("180, 180, 180");
+    const img = imageRef.current;
+    if (!img) return;
+
+    const apply = () => setGlow(sampleGlowColor(img));
+    if (img.complete && img.naturalWidth > 0) {
+      apply();
+      return;
+    }
+    img.addEventListener("load", apply);
+    return () => img.removeEventListener("load", apply);
+  }, [image]);
 
   const content = (
     <>
+      <span className="gate-label">{label}</span>
       <span className={`gate-media${logo ? " gate-media-logo" : ""}`}>
-        <img src={image} alt="" className="gate-image" />
+        <img
+          ref={imageRef}
+          src={image}
+          alt=""
+          className="gate-image"
+          crossOrigin="anonymous"
+          onLoad={(e) => setGlow(sampleGlowColor(e.currentTarget))}
+        />
         {video && (
           <video
             ref={videoRef}
@@ -74,14 +159,23 @@ function DestinationLink({ label, to, external, image, video, logo }) {
           />
         )}
       </span>
-      <span className="gate-label">{label}</span>
     </>
   );
 
   const sharedProps = {
-    className: "gate-dest",
-    onMouseEnter: playVideo,
-    onMouseLeave: pauseVideo,
+    className: `gate-dest${active ? " is-hovered" : ""}`,
+    style: {
+      "--gate-index": index,
+      "--gate-glow": glow,
+    },
+    onMouseEnter: () => onActivate(id),
+    onMouseLeave: (e) => {
+      const next = e.relatedTarget;
+      if (next && typeof next.closest === "function" && next.closest(".gate-dest")) {
+        return;
+      }
+      onDeactivate(id);
+    },
   };
 
   if (external) {
@@ -99,27 +193,100 @@ function DestinationLink({ label, to, external, image, video, logo }) {
   );
 }
 
+const TILE_STAGGER_MS = 500;
+const TILE_ANIM_MS = 550;
+const WHO_DELAY_AFTER_MS = 1000;
+
 export default function Gate() {
   const { data, loading } = useProjects();
   const contact = data?.SITE?.contact;
   const destinations = data?.SITE?.gate?.length ? data.SITE.gate : DEFAULT_GATE;
+  const [activeId, setActiveId] = useState(null);
+  const [showWho, setShowWho] = useState(false);
+  const [whoAnimate, setWhoAnimate] = useState(false);
+  const whoRef = useRef(null);
 
   useEffect(() => {
     document.body.classList.add("gate-active");
     return () => document.body.classList.remove("gate-active");
   }, []);
 
+  useEffect(() => {
+    if (loading) {
+      setShowWho(false);
+      setWhoAnimate(false);
+      return;
+    }
+
+    const lastIndex = Math.max(0, destinations.length - 1);
+    const cardsFinishMs = lastIndex * TILE_STAGGER_MS + TILE_ANIM_MS;
+    const timer = setTimeout(() => setShowWho(true), cardsFinishMs + WHO_DELAY_AFTER_MS);
+    return () => clearTimeout(timer);
+  }, [loading, destinations.length]);
+
+  useLayoutEffect(() => {
+    if (!showWho) {
+      setWhoAnimate(false);
+      return;
+    }
+
+    const el = whoRef.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const fullTravel = Math.max(window.innerWidth - 24 - rect.width - rect.left, 0);
+    const travel = Math.min(fullTravel, Math.min(window.innerWidth * 0.18, 140));
+    el.style.setProperty("--who-travel", `${travel}px`);
+    setWhoAnimate(true);
+  }, [showWho]);
+
   return (
     <div className="gate">
       <div className="gate-inner">
-        <h1 className="gate-name">Mohamed Elgaili</h1>
+        <h1 className="gate-name">
+          Mohamed Elgaili
+          <Link
+            ref={whoRef}
+            to="/about"
+            className={`gate-who${showWho ? " gate-who-visible" : ""}${whoAnimate ? " gate-who-animate" : ""}`}
+          >
+            <span className="gate-who-default">Who?</span>
+            <span className="gate-who-hover">Learn about me</span>
+          </Link>
+        </h1>
         <p className="gate-subtitle">Multidisciplinary Creative</p>
 
-        <nav className="gate-nav" aria-label="Destinations">
-          {destinations.map((dest) => (
-            <DestinationLink key={dest.id || dest.label} {...dest} />
-          ))}
-        </nav>
+        {loading ? (
+          <div className="gate-nav gate-nav-loading" aria-busy="true" aria-label="Loading destinations">
+            <div className="gate-loader">
+              <span className="gate-spinner" />
+              <span>Loading...</span>
+            </div>
+          </div>
+        ) : (
+          <nav
+            className="gate-nav"
+            aria-label="Destinations"
+            onMouseLeave={() => setActiveId(null)}
+          >
+            {destinations.map((dest, index) => {
+              const id = dest.id || dest.label;
+              return (
+                <DestinationLink
+                  key={id}
+                  {...dest}
+                  id={id}
+                  index={index}
+                  active={activeId === id}
+                  onActivate={setActiveId}
+                  onDeactivate={(leavingId) => {
+                    setActiveId((current) => (current === leavingId ? null : current));
+                  }}
+                />
+              );
+            })}
+          </nav>
+        )}
 
         {!loading && contact && (
           <div className="gate-contact">

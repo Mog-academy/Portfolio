@@ -1,13 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useProjects } from "../context/ProjectsContext.jsx";
 import { DEFAULT_GATE } from "./Gate.jsx";
+import { DEFAULT_MOTION, DEFAULT_MOTION_HERO, DEFAULT_MOTION_TOOLS } from "../data/motionDefaults.js";
+import EditorWorkspace from "../components/editor/EditorWorkspace.jsx";
 import { getApiBase, uploadDataUrl } from "../utils/blobUpload.js";
 
 export default function ProjectEditor() {
   const { data, loading, refresh } = useProjects();
   const [projects, setProjects] = useState([]);
   const [siteInfo, setSiteInfo] = useState({});
-  const [selectedProject, setSelectedProject] = useState(0);
+  const [view, setView] = useState("overview");
+  const [selection, setSelection] = useState(null);
   const processingFiles = useRef(new WeakMap());
 
   useEffect(() => {
@@ -16,6 +19,11 @@ export default function ProjectEditor() {
       setSiteInfo({
         ...data.SITE,
         gate: data.SITE?.gate?.length ? data.SITE.gate : DEFAULT_GATE.map((d) => ({ ...d })),
+        motionHero: data.SITE?.motionHero || { ...DEFAULT_MOTION_HERO },
+        motion: data.SITE?.motion?.length ? data.SITE.motion : DEFAULT_MOTION.map((d) => ({ ...d })),
+        motionTools: data.SITE?.motionTools?.length
+          ? data.SITE.motionTools
+          : DEFAULT_MOTION_TOOLS.map((d) => ({ ...d })),
       });
     }
   }, [data]);
@@ -45,6 +53,101 @@ export default function ProjectEditor() {
       });
     };
     reader.readAsDataURL(file);
+  };
+
+  const updateMotionHero = (field, value) => {
+    setSiteInfo({
+      ...siteInfo,
+      motionHero: { ...(siteInfo.motionHero || {}), [field]: value },
+    });
+  };
+
+  const updateMotionHeroFile = (field, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setSiteInfo((prev) => ({
+        ...prev,
+        motionHero: { ...(prev.motionHero || {}), [field]: e.target.result },
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const updateMotionItem = (index, field, value) => {
+    const motion = [...(siteInfo.motion || [])];
+    motion[index] = { ...motion[index], [field]: value };
+    setSiteInfo({ ...siteInfo, motion });
+  };
+
+  const updateMotionTools = (index, value) => {
+    const tools = value
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    updateMotionItem(index, "tools", tools);
+  };
+
+  const updateMotionFile = (index, field, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setSiteInfo((prev) => {
+        const motion = [...(prev.motion || [])];
+        motion[index] = { ...motion[index], [field]: e.target.result };
+        return { ...prev, motion };
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const updateMotionToolItem = (index, field, value) => {
+    const motionTools = [...(siteInfo.motionTools || [])];
+    motionTools[index] = { ...motionTools[index], [field]: value };
+    setSiteInfo({ ...siteInfo, motionTools });
+  };
+
+  const updateMotionToolFile = (index, field, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setSiteInfo((prev) => {
+        const motionTools = [...(prev.motionTools || [])];
+        motionTools[index] = { ...motionTools[index], [field]: e.target.result };
+        return { ...prev, motionTools };
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const addMotionProject = () => {
+    const motion = [...(siteInfo.motion || [])];
+    const newIndex = motion.length;
+    motion.push({
+      id: `motion-${Date.now()}`,
+      title: "New Project",
+      subtitle: "",
+      description: "",
+      category: "Motion Design",
+      year: new Date().getFullYear().toString(),
+      image: "",
+      video: "",
+      tools: [],
+    });
+    setSiteInfo({ ...siteInfo, motion });
+    setView("motion");
+    setSelection({ type: "motion", index: newIndex });
+  };
+
+  const deleteMotionProject = (index) => {
+    const motion = [...(siteInfo.motion || [])];
+    motion.splice(index, 1);
+    setSiteInfo({ ...siteInfo, motion });
+    setSelection((prev) => {
+      if (prev?.type === "motion" && prev.index === index) return null;
+      if (prev?.type === "motion" && prev.index > index) return { ...prev, index: prev.index - 1 };
+      return prev;
+    });
   };
 
   const updateProject = (index, field, value) => {
@@ -170,6 +273,7 @@ export default function ProjectEditor() {
   };
 
   const addProject = () => {
+    const newIndex = projects.length;
     setProjects([
       ...projects,
       {
@@ -183,11 +287,18 @@ export default function ProjectEditor() {
         tags: []
       }
     ]);
+    setView("events");
+    setSelection({ type: "event", index: newIndex });
   };
 
   const deleteProject = (index) => {
     const updated = projects.filter((_, i) => i !== index);
     setProjects(updated);
+    setSelection((prev) => {
+      if (prev?.type === "event" && prev.index === index) return null;
+      if (prev?.type === "event" && prev.index > index) return { ...prev, index: prev.index - 1 };
+      return prev;
+    });
   };
 
   const exportData = () => {
@@ -240,6 +351,11 @@ export default function ProjectEditor() {
             setSiteInfo({
               ...data.SITE,
               gate: data.SITE.gate?.length ? data.SITE.gate : DEFAULT_GATE.map((d) => ({ ...d })),
+              motionHero: data.SITE.motionHero || { ...DEFAULT_MOTION_HERO },
+              motion: data.SITE.motion?.length ? data.SITE.motion : DEFAULT_MOTION.map((d) => ({ ...d })),
+              motionTools: data.SITE.motionTools?.length
+                ? data.SITE.motionTools
+                : DEFAULT_MOTION_TOOLS.map((d) => ({ ...d })),
             });
           }
           if (data.PROJECTS) setProjects(data.PROJECTS);
@@ -325,6 +441,29 @@ export default function ProjectEditor() {
       }
     });
 
+    const hero = siteInfo.motionHero || {};
+    if (hero.video?.startsWith('data:')) {
+      imagesToUpload.push({ url: hero.video, type: 'motion-hero-video' });
+    }
+    if (hero.poster?.startsWith('data:')) {
+      imagesToUpload.push({ url: hero.poster, type: 'motion-hero-poster' });
+    }
+
+    siteInfo.motion?.forEach((item, mIndex) => {
+      if (item.image?.startsWith('data:')) {
+        imagesToUpload.push({ url: item.image, mIndex, type: 'motion-image' });
+      }
+      if (item.video?.startsWith('data:')) {
+        imagesToUpload.push({ url: item.video, mIndex, type: 'motion-video' });
+      }
+    });
+
+    siteInfo.motionTools?.forEach((item, tIndex) => {
+      if (item.video?.startsWith('data:')) {
+        imagesToUpload.push({ url: item.video, tIndex, type: 'motion-tool-video' });
+      }
+    });
+
     if (imagesToUpload.length === 0) {
       alert('No new images to save. All images are already uploaded!');
       return;
@@ -344,7 +483,7 @@ export default function ProjectEditor() {
           const mimeMatch = item.url.match(/data:([^;]+)/);
           const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
           const ext = mimeType.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
-          const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : timestamp;
+          const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : item.type?.startsWith('motion') ? 'motion' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
           const filePath = await uploadDataUrl(item.url, filename);
@@ -377,14 +516,27 @@ export default function ProjectEditor() {
 
         setSiteInfo((prev) => {
           const gate = [...(prev.gate || [])];
+          const motionHero = { ...(prev.motionHero || {}) };
+          const motion = [...(prev.motion || [])];
+          const motionTools = [...(prev.motionTools || [])];
           uploadedPaths.forEach((item) => {
             if (item.type === 'gate-image' && gate[item.gIndex]) {
               gate[item.gIndex] = { ...gate[item.gIndex], image: item.filePath };
             } else if (item.type === 'gate-video' && gate[item.gIndex]) {
               gate[item.gIndex] = { ...gate[item.gIndex], video: item.filePath };
+            } else if (item.type === 'motion-hero-video') {
+              motionHero.video = item.filePath;
+            } else if (item.type === 'motion-hero-poster') {
+              motionHero.poster = item.filePath;
+            } else if (item.type === 'motion-image' && motion[item.mIndex]) {
+              motion[item.mIndex] = { ...motion[item.mIndex], image: item.filePath };
+            } else if (item.type === 'motion-video' && motion[item.mIndex]) {
+              motion[item.mIndex] = { ...motion[item.mIndex], video: item.filePath };
+            } else if (item.type === 'motion-tool-video' && motionTools[item.tIndex]) {
+              motionTools[item.tIndex] = { ...motionTools[item.tIndex], video: item.filePath };
             }
           });
-          return { ...prev, gate };
+          return { ...prev, gate, motionHero, motion, motionTools };
         });
       }
 
@@ -441,10 +593,30 @@ export default function ProjectEditor() {
         }
       });
 
+      const hero = siteInfo.motionHero || {};
+      if (hero.video?.startsWith('data:')) {
+        imagesToUpload.push({ url: hero.video, type: 'motion-hero-video' });
+      }
+      if (hero.poster?.startsWith('data:')) {
+        imagesToUpload.push({ url: hero.poster, type: 'motion-hero-poster' });
+      }
+
+      siteInfo.motion?.forEach((item, mIndex) => {
+        if (item.image?.startsWith('data:')) {
+          imagesToUpload.push({ url: item.image, mIndex, type: 'motion-image' });
+        }
+        if (item.video?.startsWith('data:')) {
+          imagesToUpload.push({ url: item.video, mIndex, type: 'motion-video' });
+        }
+      });
+
       let updatedProjects = [...projects];
       let updatedSiteInfo = {
         ...siteInfo,
         gate: (siteInfo.gate || []).map((d) => ({ ...d })),
+        motionHero: { ...(siteInfo.motionHero || {}) },
+        motion: (siteInfo.motion || []).map((d) => ({ ...d })),
+        motionTools: (siteInfo.motionTools || []).map((d) => ({ ...d })),
       };
 
       if (imagesToUpload.length > 0) {
@@ -456,7 +628,7 @@ export default function ProjectEditor() {
           const mimeMatch = item.url.match(/data:([^;]+)/);
           const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
           const ext = mimeType.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
-          const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : timestamp;
+          const prefix = item.type === 'cover' ? 'cover' : item.type?.startsWith('gate') ? 'gate' : item.type?.startsWith('motion') ? 'motion' : timestamp;
           const filename = `${prefix}-${random}.${ext}`;
 
           try {
@@ -474,6 +646,16 @@ export default function ProjectEditor() {
               updatedSiteInfo.gate[item.gIndex].image = filePath;
             } else if (item.type === 'gate-video' && updatedSiteInfo.gate[item.gIndex]) {
               updatedSiteInfo.gate[item.gIndex].video = filePath;
+            } else if (item.type === 'motion-hero-video') {
+              updatedSiteInfo.motionHero.video = filePath;
+            } else if (item.type === 'motion-hero-poster') {
+              updatedSiteInfo.motionHero.poster = filePath;
+            } else if (item.type === 'motion-image' && updatedSiteInfo.motion[item.mIndex]) {
+              updatedSiteInfo.motion[item.mIndex].image = filePath;
+            } else if (item.type === 'motion-video' && updatedSiteInfo.motion[item.mIndex]) {
+              updatedSiteInfo.motion[item.mIndex].video = filePath;
+            } else if (item.type === 'motion-tool-video' && updatedSiteInfo.motionTools[item.tIndex]) {
+              updatedSiteInfo.motionTools[item.tIndex].video = filePath;
             }
             console.log(`✓ Uploaded: ${filename}`);
           } catch (uploadErr) {
@@ -543,412 +725,67 @@ export default function ProjectEditor() {
     }
   };
 
-  if (projects.length === 0) {
+  if (!siteInfo.gate?.length && !siteInfo.motion?.length && projects.length === 0) {
     return <div className="editor-page"><p>Loading editor...</p></div>;
   }
 
-  const currentProject = projects[selectedProject];
+  const headerActions = (
+    <>
+      <input
+        type="file"
+        accept=".json"
+        onChange={importData}
+        style={{ display: "none" }}
+        id="import-input"
+      />
+      <label htmlFor="import-input" className="btn-editor btn-secondary">
+        Import JSON
+      </label>
+      <button type="button" onClick={saveAllImages} className="btn-editor btn-secondary">
+        Save Images
+      </button>
+      <button type="button" onClick={copyToClipboard} className="btn-editor btn-secondary">
+        Copy Code
+      </button>
+      <button type="button" onClick={exportData} className="btn-editor btn-secondary">
+        Export JS
+      </button>
+      <button type="button" onClick={saveOnline} className="btn-editor btn-primary">
+        Save Online
+      </button>
+    </>
+  );
 
   return (
-    <div className="editor-page">
-      <div className="editor-header">
-        <h1>Project Editor</h1>
-        <div className="editor-actions">
-          <input
-            type="file"
-            accept=".json"
-            onChange={importData}
-            style={{ display: 'none' }}
-            id="import-input"
-          />
-          <label htmlFor="import-input" className="btn-editor btn-secondary">
-            Import JSON
-          </label>
-          <button onClick={saveAllImages} className="btn-editor btn-secondary">
-            Save Images
-          </button>
-          <button onClick={copyToClipboard} className="btn-editor btn-secondary">
-            Copy Code
-          </button>
-          <button onClick={exportData} className="btn-editor btn-secondary">
-            Save as projects.js
-          </button>
-          <button onClick={saveOnline} className="btn-editor btn-primary" style={{ marginLeft: '10px' }}>
-            💾 Save Online
-          </button>
-        </div>
-      </div>
-
-      <div className="editor-layout">
-        <aside className="editor-sidebar">
-          <div className="sidebar-section">
-            <button
-              className={selectedProject === 'site' ? 'sidebar-item active' : 'sidebar-item'}
-              onClick={() => setSelectedProject('site')}
-            >
-              Site Information
-            </button>
-            <button
-              className={selectedProject === 'gate' ? 'sidebar-item active' : 'sidebar-item'}
-              onClick={() => setSelectedProject('gate')}
-            >
-              Home Gate
-            </button>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="sidebar-header">
-              <h3>Projects</h3>
-              <button onClick={addProject} className="btn-icon" title="Add Project">
-                +
-              </button>
-            </div>
-            {projects.map((project, index) => (
-              <button
-                key={index}
-                className={selectedProject === index ? 'sidebar-item active' : 'sidebar-item'}
-                onClick={() => setSelectedProject(index)}
-              >
-                <span className="sidebar-item-text">{project.brand || `Project ${index + 1}`}</span>
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        <main className="editor-content">
-          {selectedProject === 'site' ? (
-            <section className="editor-section">
-              <h2>Site Information</h2>
-              <div className="editor-form">
-                <div className="form-group">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    value={siteInfo.name}
-                    onChange={(e) => updateSiteInfo("name", e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Role</label>
-                  <input
-                    type="text"
-                    value={siteInfo.role}
-                    onChange={(e) => updateSiteInfo("role", e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Location</label>
-                  <input
-                    type="text"
-                    value={siteInfo.location}
-                    onChange={(e) => updateSiteInfo("location", e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Headline</label>
-                  <input
-                    type="text"
-                    value={siteInfo.headline}
-                    onChange={(e) => updateSiteInfo("headline", e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Intro</label>
-                  <textarea
-                    value={siteInfo.intro}
-                    onChange={(e) => updateSiteInfo("intro", e.target.value)}
-                    rows="3"
-                  />
-                </div>
-              </div>
-            </section>
-          ) : selectedProject === 'gate' ? (
-            <section className="editor-section">
-              <h2>Home Gate</h2>
-              <p style={{ color: 'var(--muted)', marginTop: 0, marginBottom: 24 }}>
-                Choose the image and hover video for each destination tile on the home page.
-              </p>
-              {(siteInfo.gate || []).map((dest, index) => (
-                <div key={dest.id || index} className="section-card">
-                  <div className="section-card-header">
-                    <h4>{dest.label}</h4>
-                  </div>
-                  <div className="editor-form">
-                    <div className="form-group">
-                      <label>Tile Image</label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => updateGateFile(index, "image", e.target.files[0])}
-                      />
-                      {dest.image && (
-                        <div className="image-preview" style={{ marginTop: 10 }}>
-                          <img src={dest.image} alt={`${dest.label} preview`} />
-                        </div>
-                      )}
-                    </div>
-                    <div className="form-group">
-                      <label>Hover Video</label>
-                      <input
-                        type="file"
-                        accept="video/*"
-                        onChange={(e) => updateGateFile(index, "video", e.target.files[0])}
-                      />
-                      {dest.video && (
-                        <div className="video-preview" style={{ marginTop: 10 }}>
-                          <video
-                            src={dest.video}
-                            muted
-                            loop
-                            controls
-                            style={{ width: '100%', maxWidth: 300, borderRadius: 4 }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <div className="form-group">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={!!dest.logo}
-                          onChange={(e) => updateGateItem(index, "logo", e.target.checked)}
-                          style={{ marginRight: 8 }}
-                        />
-                        Treat image as logo (contain, white background)
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </section>
-          ) : (
-            <>
-              <div className="project-header">
-                <h2>{currentProject.brand}</h2>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Delete this project?')) {
-                      deleteProject(selectedProject);
-                      setSelectedProject(Math.max(0, selectedProject - 1));
-                    }
-                  }}
-                  className="btn-editor btn-delete"
-                >
-                  Delete Project
-                </button>
-              </div>
-
-              <section className="editor-section">
-                <h3>Basic Information</h3>
-                <div className="editor-form">
-                  <div className="form-group">
-                    <label>Slug (URL)</label>
-                    <input
-                      type="text"
-                      value={currentProject.slug}
-                      onChange={(e) => updateProject(selectedProject, "slug", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Brand</label>
-                    <input
-                      type="text"
-                      value={currentProject.brand}
-                      onChange={(e) => updateProject(selectedProject, "brand", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      value={currentProject.title}
-                      onChange={(e) => updateProject(selectedProject, "title", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Subtitle</label>
-                    <textarea
-                      value={currentProject.subtitle}
-                      onChange={(e) => updateProject(selectedProject, "subtitle", e.target.value)}
-                      rows="2"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Cover Image</label>
-                    <input
-                      type="file"
-                      accept="image/*,video/*"
-                      onChange={(e) => updateProjectCover(selectedProject, e.target.files[0])}
-                    />
-                    {currentProject.cover.src && (
-                      <div className="image-preview">
-                        <img src={currentProject.cover.src} alt="Preview" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label>Cover Alt Text</label>
-                    <input
-                      type="text"
-                      value={currentProject.cover.alt}
-                      onChange={(e) => {
-                        const updated = [...projects];
-                        updated[selectedProject].cover.alt = e.target.value;
-                        setProjects(updated);
-                      }}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Hover Video (shows on hover/mobile center)</label>
-                    <select
-                      value={currentProject.hoverVideo || ''}
-                      onChange={(e) => updateProject(selectedProject, "hoverVideo", e.target.value)}
-                    >
-                      <option value="">-- No video (use first from gallery) --</option>
-                      {currentProject.sections?.flatMap(section => 
-                        section.gallery?.filter(url => /\.(mp4|webm|ogg|mov)$/i.test(url)) || []
-                      ).map((video, idx) => (
-                        <option key={idx} value={video}>
-                          {video.split('/').pop().substring(0, 50)}
-                        </option>
-                      ))}
-                    </select>
-                    {currentProject.hoverVideo && (
-                      <div className="video-preview" style={{ marginTop: '10px' }}>
-                        <video 
-                          src={currentProject.hoverVideo} 
-                          muted 
-                          loop 
-                          autoPlay 
-                          style={{ width: '100%', maxWidth: '300px', borderRadius: '4px' }}
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label>Tags (comma-separated)</label>
-                    <input
-                      type="text"
-                      value={currentProject.tags?.join(", ") || ""}
-                      onChange={(e) =>
-                        updateProject(
-                          selectedProject,
-                          "tags",
-                          e.target.value.split(",").map((t) => t.trim())
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-              </section>
-
-              <section className="editor-section">
-                <div className="section-header">
-                  <h3>Sections</h3>
-                  <button
-                    onClick={() => addSection(selectedProject)}
-                    className="btn-editor btn-add"
-                  >
-                    + Add Section
-                  </button>
-                </div>
-
-                {currentProject.sections?.map((section, sIndex) => (
-                  <div key={sIndex} className="section-card">
-                    <div className="section-card-header">
-                      <h4>Section {sIndex + 1}</h4>
-                      <button
-                        onClick={() => {
-                          if (window.confirm('Delete this section?')) {
-                            deleteSection(selectedProject, sIndex);
-                          }
-                        }}
-                        className="btn-editor btn-delete-small"
-                      >
-                        Delete
-                      </button>
-                    </div>
-
-                    <div className="editor-form">
-                      <div className="form-group">
-                        <label>Heading</label>
-                        <input
-                          type="text"
-                          value={section.heading}
-                          onChange={(e) =>
-                            updateSection(selectedProject, sIndex, "heading", e.target.value)
-                          }
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Body</label>
-                        <textarea
-                          value={section.body}
-                          onChange={(e) =>
-                            updateSection(selectedProject, sIndex, "body", e.target.value)
-                          }
-                          rows="6"
-                          placeholder="Use \n\n for new paragraphs"
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Gallery Media</label>
-                        <div className="gallery-editor">
-                          {section.gallery?.map((url, imgIndex) => {
-                            const isVideo = url.startsWith('data:video/') || /\.(mp4|webm|ogg|mov)$/i.test(url);
-                            return (
-                              <div key={imgIndex} className="gallery-item">
-                                {isVideo ? (
-                                  <video src={url} muted loop autoPlay />
-                                ) : (
-                                  <img src={url} alt={`Gallery ${imgIndex + 1}`} />
-                                )}
-                                <button
-                                  onClick={() => removeGalleryImage(selectedProject, sIndex, imgIndex)}
-                                  className="btn-remove"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            );
-                          })}
-                          <div className="add-image-form">
-                            <input
-                              type="file"
-                              accept="image/*,video/*"
-                              multiple
-                              id={`gallery-${selectedProject}-${sIndex}`}
-                              onChange={(e) => {
-                                if (e.target.files && e.target.files.length > 0) {
-                                  addGalleryImageFile(selectedProject, sIndex, e.target.files);
-                                  e.target.value = '';
-                                }
-                              }}
-                              className="file-input"
-                            />
-                            <label htmlFor={`gallery-${selectedProject}-${sIndex}`} className="file-input-label">
-                              + Add Media
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </section>
-            </>
-          )}
-        </main>
-      </div>
-    </div>
+    <EditorWorkspace
+      view={view}
+      setView={setView}
+      selection={selection}
+      setSelection={setSelection}
+      siteInfo={siteInfo}
+      projects={projects}
+      headerActions={headerActions}
+      updateSiteInfo={updateSiteInfo}
+      updateGateItem={updateGateItem}
+      updateGateFile={updateGateFile}
+      updateMotionHero={updateMotionHero}
+      updateMotionHeroFile={updateMotionHeroFile}
+      updateMotionItem={updateMotionItem}
+      updateMotionTools={updateMotionTools}
+      updateMotionFile={updateMotionFile}
+      updateMotionToolItem={updateMotionToolItem}
+      updateMotionToolFile={updateMotionToolFile}
+      addMotionProject={addMotionProject}
+      deleteMotionProject={deleteMotionProject}
+      updateProject={updateProject}
+      updateSection={updateSection}
+      addSection={addSection}
+      deleteSection={deleteSection}
+      updateProjectCover={updateProjectCover}
+      addGalleryImageFile={addGalleryImageFile}
+      removeGalleryImage={removeGalleryImage}
+      addProject={addProject}
+      deleteProject={deleteProject}
+    />
   );
 }

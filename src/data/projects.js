@@ -1,6 +1,8 @@
 // Edit this file to add / update projects.
 // Replace image placeholders with your real images later.
 
+import { DEFAULT_MOTION, DEFAULT_MOTION_HERO, DEFAULT_MOTION_TOOLS } from "./motionDefaults.js";
+
 export const SITE = {
   name: "Mohamed Elgaili",
   role: "Creative Producer",
@@ -50,7 +52,10 @@ export const SITE = {
       video: "/project_images/1770066640012-36lhnch4l.mp4",
       logo: true
     }
-  ]
+  ],
+  motionHero: DEFAULT_MOTION_HERO,
+  motion: DEFAULT_MOTION,
+  motionTools: DEFAULT_MOTION_TOOLS.map((tool) => ({ ...tool })),
 };
 
 export const PROJECTS = [

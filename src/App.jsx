@@ -7,6 +7,7 @@ import SocialBar from "./components/SocialBar.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import PasswordProtect from "./components/PasswordProtect.jsx";
 import Gate from "./pages/Gate.jsx";
+import About from "./pages/About.jsx";
 import Home from "./pages/Home.jsx";
 import Motion from "./pages/Motion.jsx";
 import Project from "./pages/Project.jsx";
@@ -15,23 +16,27 @@ import NotFound from "./pages/NotFound.jsx";
 import ProjectEditor from "./pages/ProjectEditor.jsx";
 
 function PortfolioLayout() {
+  const location = useLocation();
+  const isEditor = location.pathname === "/editing";
+
   return (
-    <div className="app-shell layout">
-      <aside className="sidebar">
-        <Navbar />
-      </aside>
+    <div className={`app-shell layout${isEditor ? " layout-editor" : ""}`}>
+      {!isEditor && (
+        <aside className="sidebar">
+          <Navbar />
+        </aside>
+      )}
 
       <main className="app-main content-area">
-        <SocialBar />
+        {!isEditor && <SocialBar />}
         <Routes>
           <Route path="/events" element={<Home />} />
-          <Route path="/motion" element={<Motion />} />
           <Route path="/philosophy" element={<Philosophy />} />
           <Route path="/editing" element={<PasswordProtect><ProjectEditor /></PasswordProtect>} />
           <Route path="/project/:slug" element={<Project />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Footer />
+        {!isEditor && <Footer />}
       </main>
     </div>
   );
@@ -39,14 +44,19 @@ function PortfolioLayout() {
 
 function AppRoutes() {
   const location = useLocation();
-  const isGate = location.pathname === "/";
+  const isStandalone =
+    location.pathname === "/" ||
+    location.pathname === "/about" ||
+    location.pathname === "/motion";
 
   return (
     <>
       <ScrollToTop />
-      {isGate ? (
+      {isStandalone ? (
         <Routes>
           <Route path="/" element={<Gate />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/motion" element={<Motion />} />
         </Routes>
       ) : (
         <PortfolioLayout />
