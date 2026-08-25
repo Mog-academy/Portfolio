@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useProjects } from "../context/ProjectsContext.jsx";
 import GateTopNav from "../components/GateTopNav.jsx";
 import GateSignoffContact from "../components/GateSignoffContact.jsx";
+import GateCursorDot from "../components/GateCursorDot.jsx";
 
 const STORY = [
   {
@@ -84,6 +85,7 @@ export default function About() {
 
   return (
     <div className="gate about-page">
+      <GateCursorDot />
       <div className="gate-inner about-inner">
         <GateTopNav />
         <h1 className="gate-name">

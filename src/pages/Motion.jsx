@@ -137,11 +137,14 @@ export default function Motion() {
 
         <header className="motion-topbar">
           <Link to="/" className="motion-logo">
+            <svg className="motion-logo-arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+            </svg>
             Back to Home
           </Link>
         </header>
 
-        <div className="motion-hero-body">
+        <div className={`motion-hero-body${showAllProjects ? " is-projects-expanded" : ""}`}>
           <div className="motion-hero-copy">
             <div className="motion-hero-heading">
               <h1 className="motion-hero-name">Mohamed Elgaili</h1>

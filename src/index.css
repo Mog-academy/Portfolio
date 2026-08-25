@@ -847,7 +847,16 @@ body.gate-active{background:#050505}
   50%{transform:translateY(4px)}
 }
 .about-page .gate-contact{margin-top:32px}
-.gate-signoff-contact .gate-contact{margin-top:32px}
+.about-page .gate-signoff-contact .gate-contact,
+.gate-signoff-contact .gate-contact{
+  margin-top:32px;
+  visibility:visible;
+}
+.about-page .gate-signoff-contact .gate-contact-link,
+.gate-signoff-contact .gate-contact-link{
+  opacity:1;
+  transform:none;
+}
 
 @media (max-width:700px){
   .about-page.gate{padding-top:0}
@@ -1544,6 +1553,9 @@ body.motion-active{background:#000;color:#f5f5f5}
   to{opacity:1;transform:translateY(0)}
 }
 .motion-logo{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
   font-family:Helvetica,Arial,sans-serif;
   font-size:11px;
   font-weight:500;
@@ -1554,6 +1566,12 @@ body.motion-active{background:#000;color:#f5f5f5}
   transition:color 0.25s ease;
   opacity:0;
   animation:motion-fade-up 0.5s ease-out 0.5s forwards;
+}
+.motion-logo-arrow{
+  width:14px;
+  height:14px;
+  flex-shrink:0;
+  opacity:0.85;
 }
 .motion-logo:hover{color:#fff}
 .motion-topbar{
@@ -1631,6 +1649,9 @@ body.motion-active{background:#000;color:#f5f5f5}
 .motion-section-nav button:nth-child(2){animation-delay:2.2s}
 .motion-section-nav button:nth-child(3){animation-delay:2.35s}
 .motion-section-nav button:hover{color:#fff}
+.motion-hero-body.is-projects-expanded .motion-section-nav{
+  margin-bottom:clamp(32px, 6vh, 56px);
+}
 .motion-work-section{
   scroll-margin-top:24px;
 }
