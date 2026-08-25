@@ -376,6 +376,21 @@ body.gate-active{background:#050505}
   min-height:220px;
   align-items:center;
 }
+.gate-loading{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#050505;
+}
+.gate-is-loading .gate-inner,
+.gate-is-loading .gate-name-anim,
+.gate-is-loading .gate-cursor-layer,
+.gate-is-loading .gate-cursor-dot-shell{
+  visibility:hidden;
+}
 .gate-loader{
   display:flex;
   flex-direction:column;

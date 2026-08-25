@@ -207,7 +207,7 @@ function isInteractiveTarget(target) {
 
 function cardsFinishMs(cardCount) {
   const lastIndex = Math.max(0, cardCount - 1);
-  return CARDS_DELAY_MS + lastIndex * TILE_STAGGER_MS + TILE_ANIM_MS;
+  return lastIndex * TILE_STAGGER_MS + TILE_ANIM_MS;
 }
 
 export default function Gate() {
@@ -215,6 +215,8 @@ export default function Gate() {
   const contact = data?.SITE?.contact;
   const destinations = data?.SITE?.gate?.length ? data.SITE.gate : DEFAULT_GATE;
   const [activeId, setActiveId] = useState(null);
+  const [animLoading, setAnimLoading] = useState(true);
+  const [sequenceActive, setSequenceActive] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showWho, setShowWho] = useState(false);
   const [whoAnimate, setWhoAnimate] = useState(false);
@@ -236,25 +238,28 @@ export default function Gate() {
   }, []);
 
   useEffect(() => {
+    if (!sequenceActive) return undefined;
     setShowContact(false);
     const contactAt = cardsFinishMs(destinations.length);
     const contactTimer = setTimeout(() => setShowContact(true), contactAt);
     return () => clearTimeout(contactTimer);
-  }, [destinations.length]);
+  }, [destinations.length, sequenceActive]);
 
   useEffect(() => {
+    if (!sequenceActive) return undefined;
     setShowWho(false);
     setWhoAnimate(false);
     const whoAt = cardsFinishMs(destinations.length) + WHO_DELAY_AFTER_MS;
     const timer = setTimeout(() => setShowWho(true), whoAt);
     return () => clearTimeout(timer);
-  }, [destinations.length]);
+  }, [destinations.length, sequenceActive]);
 
   useEffect(() => {
+    if (!sequenceActive) return undefined;
     setHintGuideReady(false);
     const timer = setTimeout(() => setHintGuideReady(true), cardsFinishMs(destinations.length));
     return () => clearTimeout(timer);
-  }, [destinations.length]);
+  }, [destinations.length, sequenceActive]);
 
   useEffect(() => {
     const prefersFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -368,9 +373,16 @@ export default function Gate() {
 
   return (
     <div
-      className={`gate gate-sequence-active${showContact ? " gate-contact-ready" : ""}`}
-      style={{ "--gate-cards-delay": `${CARDS_DELAY_MS}ms` }}
+      className={`gate${sequenceActive ? " gate-sequence-active" : ""}${showContact ? " gate-contact-ready" : ""}${animLoading ? " gate-is-loading" : ""}`}
+      style={{ "--gate-cards-delay": "0ms" }}
     >
+      {animLoading && (
+        <div className="gate-loading" aria-live="polite" aria-busy="true">
+          <div className="gate-loader">
+            <div className="gate-spinner" aria-hidden="true" />
+          </div>
+        </div>
+      )}
       <div className="gate-inner">
         <header className="gate-intro-slot">
           <h1 className="sr-only">Mohamed Elgaili</h1>
@@ -470,7 +482,11 @@ export default function Gate() {
       </div>
       <div className="gate-name-anim">
         <div className="gate-name-anim-frame">
-          <GateNameAnimation />
+          <GateNameAnimation
+            sequenceStartMs={CARDS_DELAY_MS}
+            onLoaded={() => setAnimLoading(false)}
+            onSequenceStart={() => setSequenceActive(true)}
+          />
           <Link
             ref={whoRef}
             to="/about"

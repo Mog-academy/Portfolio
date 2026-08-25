@@ -35,8 +35,20 @@ function fixTextColors(container) {
   });
 }
 
-export default function GateNameAnimation() {
+export default function GateNameAnimation({
+  onLoaded,
+  onSequenceStart,
+  sequenceStartMs = 3500,
+}) {
   const containerRef = useRef(null);
+  const sequenceStartedRef = useRef(false);
+  const onLoadedRef = useRef(onLoaded);
+  const onSequenceStartRef = useRef(onSequenceStart);
+
+  useEffect(() => {
+    onLoadedRef.current = onLoaded;
+    onSequenceStartRef.current = onSequenceStart;
+  }, [onLoaded, onSequenceStart]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -44,6 +56,16 @@ export default function GateNameAnimation() {
 
     let animation;
     let cancelled = false;
+    sequenceStartedRef.current = false;
+
+    function maybeStartSequence() {
+      if (!animation || sequenceStartedRef.current) return;
+      const frameRate = animation.frameRate || 30;
+      const timeMs = (animation.currentFrame / frameRate) * 1000;
+      if (timeMs < sequenceStartMs) return;
+      sequenceStartedRef.current = true;
+      onSequenceStartRef.current?.();
+    }
 
     async function init() {
       try {
@@ -84,8 +106,14 @@ export default function GateNameAnimation() {
 
       const applyTextColors = () => fixTextColors(container);
 
-      animation.addEventListener("DOMLoaded", applyTextColors);
-      animation.addEventListener("enterFrame", applyTextColors);
+      animation.addEventListener("DOMLoaded", () => {
+        applyTextColors();
+        onLoadedRef.current?.();
+      });
+      animation.addEventListener("enterFrame", () => {
+        applyTextColors();
+        maybeStartSequence();
+      });
       animation.addEventListener("complete", applyTextColors);
     }
 
@@ -95,7 +123,7 @@ export default function GateNameAnimation() {
       cancelled = true;
       animation?.destroy();
     };
-  }, []);
+  }, [sequenceStartMs]);
 
   return <div ref={containerRef} className="gate-name-lottie" aria-hidden="true" />;
 }
