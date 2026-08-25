@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import { ProjectsProvider } from "./context/ProjectsContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -69,6 +70,7 @@ export default function App() {
   return (
     <ProjectsProvider>
       <AppRoutes />
+      <Analytics />
     </ProjectsProvider>
   );
 }
