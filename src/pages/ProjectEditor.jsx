@@ -139,6 +139,29 @@ export default function ProjectEditor() {
     setSelection({ type: "motion", index: newIndex });
   };
 
+  const reorderMotionProjects = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return;
+    setSiteInfo((prev) => {
+      const motion = [...(prev.motion || [])];
+      if (fromIndex >= motion.length || toIndex >= motion.length) return prev;
+      const [moved] = motion.splice(fromIndex, 1);
+      motion.splice(toIndex, 0, moved);
+      return { ...prev, motion };
+    });
+    setSelection((prev) => {
+      if (prev?.type !== "motion") return prev;
+      const { index } = prev;
+      if (index === fromIndex) return { ...prev, index: toIndex };
+      if (fromIndex < toIndex && index > fromIndex && index <= toIndex) {
+        return { ...prev, index: index - 1 };
+      }
+      if (fromIndex > toIndex && index >= toIndex && index < fromIndex) {
+        return { ...prev, index: index + 1 };
+      }
+      return prev;
+    });
+  };
+
   const deleteMotionProject = (index) => {
     const motion = [...(siteInfo.motion || [])];
     motion.splice(index, 1);
@@ -776,6 +799,7 @@ export default function ProjectEditor() {
       updateMotionToolItem={updateMotionToolItem}
       updateMotionToolFile={updateMotionToolFile}
       addMotionProject={addMotionProject}
+      reorderMotionProjects={reorderMotionProjects}
       deleteMotionProject={deleteMotionProject}
       updateProject={updateProject}
       updateSection={updateSection}

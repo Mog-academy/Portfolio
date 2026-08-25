@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import MotionProjectCard from "../motion/MotionProjectCard.jsx";
 import MotionEssenceSection from "../motion/MotionEssenceSection.jsx";
 import MotionToolkitSection from "../motion/MotionToolkitSection.jsx";
@@ -12,9 +12,13 @@ export default function MotionEditorPreview({
   motionTools,
   selection,
   onSelect,
+  onReorder,
   compact = false,
 }) {
   const [activeId, setActiveId] = useState(null);
+  const [dragIndex, setDragIndex] = useState(null);
+  const [dropIndex, setDropIndex] = useState(null);
+  const skipClickRef = useRef(false);
   const contact = siteInfo?.contact;
   const hero = motionHero || {};
   const projects = motion || [];
@@ -26,6 +30,34 @@ export default function MotionEditorPreview({
     if (event.target.closest(".motion-more-btn")) return;
     if (event.target.closest(".motion-tool-card")) return;
     onSelect({ type: "motion-hero" });
+  };
+
+  const handleDragStart = (index, event) => {
+    skipClickRef.current = false;
+    setDragIndex(index);
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", String(index));
+  };
+
+  const handleDragOver = (index, event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    if (dropIndex !== index) setDropIndex(index);
+  };
+
+  const handleDrop = (index, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const from = Number(event.dataTransfer.getData("text/plain"));
+    skipClickRef.current = true;
+    onReorder?.(from, index);
+    setDragIndex(null);
+    setDropIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDragIndex(null);
+    setDropIndex(null);
   };
 
   return (
@@ -97,7 +129,20 @@ export default function MotionEditorPreview({
                     }}
                     editorMode
                     selected={selection?.type === "motion" && selection.index === index}
-                    onEditorSelect={() => onSelect({ type: "motion", index })}
+                    onEditorSelect={() => {
+                      if (skipClickRef.current) {
+                        skipClickRef.current = false;
+                        return;
+                      }
+                      onSelect({ type: "motion", index });
+                    }}
+                    draggable={Boolean(onReorder)}
+                    dragging={dragIndex === index}
+                    dropTarget={dropIndex === index && dragIndex !== index}
+                    onDragStart={(event) => handleDragStart(index, event)}
+                    onDragOver={(event) => handleDragOver(index, event)}
+                    onDrop={(event) => handleDrop(index, event)}
+                    onDragEnd={handleDragEnd}
                   />
                 );
               })}

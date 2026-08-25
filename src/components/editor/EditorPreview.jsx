@@ -55,7 +55,7 @@ function EventsMockup({ projects, selection, onSelect, compact }) {
   );
 }
 
-export default function EditorPreview({ view, siteInfo, projects, selection, onSelect }) {
+export default function EditorPreview({ view, siteInfo, projects, selection, onSelect, onReorderMotion }) {
   const gate = siteInfo.gate || [];
   const motion = siteInfo.motion || [];
   const motionHero = siteInfo.motionHero || {};
@@ -88,6 +88,7 @@ export default function EditorPreview({ view, siteInfo, projects, selection, onS
             motionTools={siteInfo.motionTools}
             selection={selection}
             onSelect={(sel) => onSelect(sel, "motion")}
+            onReorder={onReorderMotion}
             compact
           />
         </section>
@@ -127,6 +128,7 @@ export default function EditorPreview({ view, siteInfo, projects, selection, onS
         motionTools={siteInfo.motionTools}
         selection={selection}
         onSelect={onSelect}
+        onReorder={onReorderMotion}
       />
     );
   }

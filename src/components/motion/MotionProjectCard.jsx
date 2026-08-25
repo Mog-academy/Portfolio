@@ -11,6 +11,13 @@ export default function MotionProjectCard({
   editorMode = false,
   selected = false,
   onEditorSelect,
+  draggable = false,
+  dragging = false,
+  dropTarget = false,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDragEnd,
 }) {
   const videoRef = useRef(null);
   const { title, subtitle, category, year, image, video, tools } = project;
@@ -37,8 +44,13 @@ export default function MotionProjectCard({
 
   return (
     <article
-      className={`motion-card motion-card-${enterMode}${active ? " is-hovered" : ""}${editorMode && selected ? " is-editor-selected" : ""}`}
+      className={`motion-card motion-card-${enterMode}${active ? " is-hovered" : ""}${editorMode && selected ? " is-editor-selected" : ""}${dragging ? " is-dragging" : ""}${dropTarget ? " is-drop-target" : ""}`}
       style={{ "--motion-index": index }}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onDragEnd={onDragEnd}
       onMouseEnter={() => onActivate(project.id || project.title)}
       onMouseLeave={(e) => {
         const next = e.relatedTarget;

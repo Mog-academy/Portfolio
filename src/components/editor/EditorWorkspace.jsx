@@ -39,6 +39,7 @@ export default function EditorWorkspace(props) {
     projects,
     headerActions,
     addMotionProject,
+    reorderMotionProjects,
     addProject,
   } = props;
 
@@ -182,6 +183,7 @@ export default function EditorWorkspace(props) {
               projects={projects}
               selection={selection}
               onSelect={handleSelect}
+              onReorderMotion={reorderMotionProjects}
             />
           </div>
         </div>
