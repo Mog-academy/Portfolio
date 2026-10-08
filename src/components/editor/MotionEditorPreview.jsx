@@ -62,13 +62,7 @@ export default function MotionEditorPreview({
 
   return (
     <div className={`motion-page ed-motion-live${compact ? " is-compact" : ""}`}>
-      <section
-        className={`motion-hero${selection?.type === "motion-hero" ? " is-editor-selected" : ""}`}
-        aria-label="Introduction"
-        onClick={handleHeroBackgroundClick}
-        onKeyDown={() => {}}
-        role="presentation"
-      >
+      <div className="motion-hero-bg" aria-hidden="true">
         {hero.video ? (
           <video
             className="motion-hero-video"
@@ -82,10 +76,18 @@ export default function MotionEditorPreview({
         ) : hero.poster ? (
           <img className="motion-hero-video ed-motion-hero-poster" src={hero.poster} alt="" />
         ) : (
-          <div className="motion-hero-video ed-motion-hero-empty" aria-hidden="true" />
+          <div className="motion-hero-video ed-motion-hero-empty" />
         )}
-        <div className="motion-hero-overlay" aria-hidden="true" />
+        <div className="motion-hero-overlay" />
+      </div>
 
+      <section
+        className={`motion-hero${selection?.type === "motion-hero" ? " is-editor-selected" : ""}`}
+        aria-label="Introduction"
+        onClick={handleHeroBackgroundClick}
+        onKeyDown={() => {}}
+        role="presentation"
+      >
         <header className="motion-topbar">
           <span className="motion-logo">Back to Home</span>
         </header>
@@ -108,46 +110,46 @@ export default function MotionEditorPreview({
               </button>
             </nav>
           </div>
+        </div>
+      </section>
 
-          <div id="work" className="motion-work-section">
-            <div
-              className={`motion-projects${showExpanded ? " is-expanded" : ""}`}
-              onMouseLeave={() => setActiveId(null)}
-            >
-              {projects.map((project, index) => {
-                const id = project.id || project.title || String(index);
-                return (
-                  <MotionProjectCard
-                    key={id}
-                    project={project}
-                    index={index}
-                    enterMode="initial"
-                    active={activeId === id}
-                    onActivate={setActiveId}
-                    onDeactivate={(leavingId) => {
-                      setActiveId((current) => (current === leavingId ? null : current));
-                    }}
-                    editorMode
-                    selected={selection?.type === "motion" && selection.index === index}
-                    onEditorSelect={() => {
-                      if (skipClickRef.current) {
-                        skipClickRef.current = false;
-                        return;
-                      }
-                      onSelect({ type: "motion", index });
-                    }}
-                    draggable={Boolean(onReorder)}
-                    dragging={dragIndex === index}
-                    dropTarget={dropIndex === index && dragIndex !== index}
-                    onDragStart={(event) => handleDragStart(index, event)}
-                    onDragOver={(event) => handleDragOver(index, event)}
-                    onDrop={(event) => handleDrop(index, event)}
-                    onDragEnd={handleDragEnd}
-                  />
-                );
-              })}
-            </div>
-          </div>
+      <section id="work" className="motion-work-section" aria-label="Work">
+        <div
+          className={`motion-projects${showExpanded ? " is-expanded" : ""}`}
+          onMouseLeave={() => setActiveId(null)}
+        >
+          {projects.map((project, index) => {
+            const id = project.id || project.title || String(index);
+            return (
+              <MotionProjectCard
+                key={id}
+                project={project}
+                index={index}
+                enterMode="initial"
+                active={activeId === id}
+                onActivate={setActiveId}
+                onDeactivate={(leavingId) => {
+                  setActiveId((current) => (current === leavingId ? null : current));
+                }}
+                editorMode
+                selected={selection?.type === "motion" && selection.index === index}
+                onEditorSelect={() => {
+                  if (skipClickRef.current) {
+                    skipClickRef.current = false;
+                    return;
+                  }
+                  onSelect({ type: "motion", index });
+                }}
+                draggable={Boolean(onReorder)}
+                dragging={dragIndex === index}
+                dropTarget={dropIndex === index && dragIndex !== index}
+                onDragStart={(event) => handleDragStart(index, event)}
+                onDragOver={(event) => handleDragOver(index, event)}
+                onDrop={(event) => handleDrop(index, event)}
+                onDragEnd={handleDragEnd}
+              />
+            );
+          })}
         </div>
       </section>
 

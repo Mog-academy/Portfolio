@@ -1,14 +1,17 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { useProjects } from "../context/ProjectsContext.jsx";
 
 export default function SocialBar() {
   const { data, loading } = useProjects();
+  const location = useLocation();
+  const isEventsPage = location.pathname === "/events";
 
   if (loading || !data) return null;
 
   const { SITE } = data;
   return (
-    <div className="social-bar">
+    <div className={`social-bar${isEventsPage ? "" : " social-bar-large"}`}>
       <div className="social-header">
         <h1 className="social-name">{SITE.name}</h1>
         <p className="social-role">{SITE.role}</p>

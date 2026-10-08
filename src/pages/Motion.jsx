@@ -11,6 +11,7 @@ import {
   DEFAULT_MOTION_TOOLS,
   MOTION_INITIAL_COUNT,
 } from "../data/motionDefaults.js";
+
 function MotionProjectModal({ project, onClose }) {
   const videoRef = useRef(null);
 
@@ -123,7 +124,7 @@ export default function Motion() {
 
   return (
     <div className="motion-page">
-      <section className="motion-hero" aria-label="Introduction">
+      <div className="motion-hero-bg" aria-hidden="true">
         <video
           className="motion-hero-video"
           src={hero.video}
@@ -133,8 +134,10 @@ export default function Motion() {
           loop
           playsInline
         />
-        <div className="motion-hero-overlay" aria-hidden="true" />
+        <div className="motion-hero-overlay" />
+      </div>
 
+      <section className="motion-hero" aria-label="Introduction">
         <header className="motion-topbar">
           <Link to="/" className="motion-logo">
             <svg className="motion-logo-arrow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -144,14 +147,14 @@ export default function Motion() {
           </Link>
         </header>
 
-        <div className={`motion-hero-body${showAllProjects ? " is-projects-expanded" : ""}`}>
+        <div className="motion-hero-body">
           <div className="motion-hero-copy">
             <div className="motion-hero-heading">
               <h1 className="motion-hero-name">Mohamed Elgaili</h1>
               <p className="motion-hero-role">Senior Motion Designer / Creative Director</p>
             </div>
             <nav className="motion-section-nav" aria-label="Page sections">
-              <button type="button" onClick={expandProjects}>
+              <button type="button" onClick={() => scrollToSection("work")}>
                 Work
               </button>
               <button type="button" onClick={() => scrollToSection("about")}>
@@ -162,52 +165,50 @@ export default function Motion() {
               </button>
             </nav>
           </div>
-
-          <div id="work" ref={workRef} className="motion-work-section">
-            <div
-              className={`motion-projects${showAllProjects ? " is-expanded" : ""}`}
-              onMouseLeave={() => setActiveId(null)}
-            >
-              {visibleProjects.map((project, index) => {
-                const id = project.id || project.title;
-                const enterMode =
-                  showAllProjects && index >= MOTION_INITIAL_COUNT ? "expand" : "initial";
-                return (
-                  <MotionProjectCard
-                    key={id}
-                    project={project}
-                    index={
-                      enterMode === "expand" ? index - MOTION_INITIAL_COUNT : index
-                    }
-                    enterMode={enterMode}
-                    active={activeId === id}
-                    onActivate={setActiveId}
-                    onDeactivate={(leavingId) => {
-                      setActiveId((current) => (current === leavingId ? null : current));
-                    }}
-                    onOpen={setSelectedProject}
-                  />
-                );
-              })}
-            </div>
-
-            {hasMoreProjects && !showAllProjects && (
-              <div className="motion-projects-actions motion-enter-more">
-                <button type="button" className="motion-more-btn" onClick={expandProjects}>
-                  More projects
-                </button>
-              </div>
-            )}
-
-            {hasMoreProjects && showAllProjects && (
-              <div className="motion-projects-actions">
-                <button type="button" className="motion-more-btn" onClick={collapseProjects}>
-                  Show less
-                </button>
-              </div>
-            )}
-          </div>
         </div>
+      </section>
+
+      <section id="work" ref={workRef} className="motion-work-section" aria-label="Work">
+        <div
+          className={`motion-projects${showAllProjects ? " is-expanded" : ""}`}
+          onMouseLeave={() => setActiveId(null)}
+        >
+          {visibleProjects.map((project, index) => {
+            const id = project.id || project.title;
+            const enterMode =
+              showAllProjects && index >= MOTION_INITIAL_COUNT ? "expand" : "initial";
+            return (
+              <MotionProjectCard
+                key={id}
+                project={project}
+                index={enterMode === "expand" ? index - MOTION_INITIAL_COUNT : index}
+                enterMode={enterMode}
+                active={activeId === id}
+                onActivate={setActiveId}
+                onDeactivate={(leavingId) => {
+                  setActiveId((current) => (current === leavingId ? null : current));
+                }}
+                onOpen={setSelectedProject}
+              />
+            );
+          })}
+        </div>
+
+        {hasMoreProjects && !showAllProjects && (
+          <div className="motion-projects-actions motion-enter-more">
+            <button type="button" className="motion-more-btn" onClick={expandProjects}>
+              More projects
+            </button>
+          </div>
+        )}
+
+        {hasMoreProjects && showAllProjects && (
+          <div className="motion-projects-actions">
+            <button type="button" className="motion-more-btn" onClick={collapseProjects}>
+              Show less
+            </button>
+          </div>
+        )}
       </section>
 
       <MotionEssenceSection />
